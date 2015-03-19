@@ -2,6 +2,7 @@ package bookeeping.rest.service;
 
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -15,6 +16,7 @@ import org.codehaus.jettison.json.JSONObject;
 import bookeeping.backend.database.service.UserService;
 import bookeeping.backend.database.service.neo4jrest.impl.UserServiceImpl;
 import bookeeping.backend.exception.DuplicateUser;
+import bookeeping.backend.exception.UserNotFound;
 import bookeeping.rest.exception.MandatoryPropertyNotFound;
 import bookeeping.rest.service.property.UserProperty;
 import bookeeping.rest.utilities.ExpectProperty;
@@ -28,6 +30,78 @@ public class User
 	public User()
 	{
 		userService = new UserServiceImpl();
+	}
+	
+	@POST
+	@Path("/info")
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getUser(InputStream inputStream)
+	{
+		JSONObject response = new JSONObject();
+		try
+		{
+			JSONObject jsonObject = ProduceJson.inputStreamToJson(inputStream);
+			
+			String[] expectedProperties = {UserProperty.username.name()};
+			String[] optionalProperties = {};
+			
+			Map<String, Object> userProperties = null;
+			try
+			{
+				userProperties = ExpectProperty.expectProperty(jsonObject, expectedProperties, optionalProperties);
+			}
+			catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
+			{
+				response.put("status", "failure");
+				response.put("code", 400);
+				response.put("code_string", "Bad Request");
+				response.put("message", mandatoryPropertyNotFound.getMessage());
+				return response.toString();
+			}
+			
+			String username = (String) userProperties.remove(UserProperty.username.name());			
+			try
+			{
+				JSONObject data = new JSONObject();
+				Map<String, Object> retrievedUserProperties = userService.getUser(username);
+				for(Entry<String, Object> entry : retrievedUserProperties.entrySet())
+				{
+					data.put(entry.getKey(), entry.getValue());
+				}
+				
+				response.put("status", "success");
+				response.put("code", 200);
+				response.put("code_string", "Success");
+				response.put("message", "1 user found.");
+				response.put("data", data);
+				return response.toString();
+			}
+			catch (UserNotFound userNotFound)
+			{
+				response.put("status", "failure");
+				response.put("code", 400);
+				response.put("code_string", "Bad Request");
+				response.put("message", userNotFound.getMessage());
+				return response.toString();
+			}
+		}
+		catch(JSONException jsonException)
+		{
+			try
+			{
+				response.put("status", "failure");
+				response.put("code", 400);
+				response.put("code_string", "Bad Request");
+				response.put("message", "ERROR: Malformed Json");
+				return response.toString();
+			}
+			catch(JSONException jsonExceptionUnderCatch)
+			{
+				jsonExceptionUnderCatch.printStackTrace();
+				return new JSONObject().toString();
+			}
+		}
 	}
 	
 	@POST

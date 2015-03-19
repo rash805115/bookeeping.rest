@@ -1,8 +1,8 @@
 $(document).ready(function()
 {
-	var data = '{"username": "rash", "password": "pass"}';
-	$("#sendRequest").click(function()
+	$("#sendCreateUser").click(function()
 	{
+		var data = '{"username": "rash", "firstName": "Rahul", "lastName": "Chaudhary"}';
 		$.ajax(
 		{
 			url: "http://localhost:8080/bookeeping.rest/api/user/create",
@@ -13,8 +13,26 @@ $(document).ready(function()
 			dataType : "json",
 			success: function(response)
 			{
-				$("#response").html(JSON.stringify(response));
+				$("#responseCreateUser").html(JSON.stringify(response));
 			}
 		});
 	});
+	
+	$("#sendGetUser").click(function()
+			{
+				var data = '{"username": "rash"}';
+				$.ajax(
+				{
+					url: "http://localhost:8080/bookeeping.rest/api/user/info",
+					async: false,
+					type : "post",
+					data : data,
+					contentType : "application/json",
+					dataType : "json",
+					success: function(response)
+					{
+						$("#responseGetUser").html(JSON.stringify(response));
+					}
+				});
+			});
 });
