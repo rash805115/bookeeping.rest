@@ -29,22 +29,6 @@ public class UserDatabaseService
 		return UserDatabaseService.userDatabaseService;
 	}
 	
-	public Response getUser(String userId)
-	{
-		Response response = new Response();
-		try
-		{
-			Map<String, Object> retrievedUserProperties = this.userService.getUser(userId);
-			response.addData(retrievedUserProperties);
-			return response;
-		}
-		catch(UserNotFound userNotFound)
-		{
-			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", userNotFound.getMessage());
-			return response;
-		}
-	}
-	
 	public Response createUser(String userId, Map<String, Object> userProperties)
 	{
 		Response response = new Response();
@@ -57,6 +41,22 @@ public class UserDatabaseService
 		catch (DuplicateUser duplicateUser)
 		{
 			response.addStatusAndOperation(HttpCodes.CONFLICT, "failure", duplicateUser.getMessage());
+			return response;
+		}
+	}
+	
+	public Response getUser(String userId)
+	{
+		Response response = new Response();
+		try
+		{
+			Map<String, Object> retrievedProperties = this.userService.getUser(userId);
+			response.addData(retrievedProperties);
+			return response;
+		}
+		catch(UserNotFound userNotFound)
+		{
+			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", userNotFound.getMessage());
 			return response;
 		}
 	}
