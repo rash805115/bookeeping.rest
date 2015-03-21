@@ -1,4 +1,4 @@
-package bookeeping.rest.service.property;
+package bookeeping.rest.request.expect;
 
 public enum UserProperty
 {
