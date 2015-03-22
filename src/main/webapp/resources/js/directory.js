@@ -36,7 +36,7 @@ $(document).ready(function()
 		});
 	});
 	
-	$("#sendDeleteFilesystemTemporarily").click(function()
+	$("#sendDeleteDirectoryTemporarily").click(function()
 	{
 		var data = '{"username": "rash", "filesystemId": "rash-filesystem-1", "directoryPath": "/", "directoryName": "dir1"}';
 		$.ajax(

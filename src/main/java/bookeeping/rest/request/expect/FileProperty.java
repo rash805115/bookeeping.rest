@@ -2,5 +2,5 @@ package bookeeping.rest.request.expect;
 
 public enum FileProperty
 {
-	filepath, filename
+	filepath, filename, oldfilepath, oldfilename, newfilepath, newfilename, sharewithuser, unsharewithuser, filepermission
 }
