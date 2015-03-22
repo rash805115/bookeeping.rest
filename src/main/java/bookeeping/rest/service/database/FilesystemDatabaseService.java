@@ -58,7 +58,7 @@ public class FilesystemDatabaseService
 		try
 		{
 			this.filesystemService.createNewVersion(userId, filesystemId, changeMetadata, changedProperties);
-			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: filesystem version created - \"" + filesystemId + "\"");
+			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: filesystem version created for - \"" + filesystemId + "\"");
 			return response;
 		}
 		catch (UserNotFound | FilesystemNotFound exception)
@@ -113,6 +113,7 @@ public class FilesystemDatabaseService
 		{
 			Map<String, Object> retrievedProperties = this.filesystemService.getFilesystem(userId, filesystemId, version);
 			response.addData(retrievedProperties);
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for filesystem - \"" + filesystemId + "\"");
 			return response;
 		}
 		catch (UserNotFound | FilesystemNotFound | VersionNotFound exception)

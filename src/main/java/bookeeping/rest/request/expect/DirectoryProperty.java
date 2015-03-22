@@ -2,5 +2,5 @@ package bookeeping.rest.request.expect;
 
 public enum DirectoryProperty
 {
-	directorypath, directoryname
+	directorypath, directoryname, olddirectorypath, olddirectoryname, newdirectorypath, newdirectoryname
 }

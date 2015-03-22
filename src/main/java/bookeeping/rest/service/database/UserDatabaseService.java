@@ -52,6 +52,7 @@ public class UserDatabaseService
 		{
 			Map<String, Object> retrievedProperties = this.userService.getUser(userId);
 			response.addData(retrievedProperties);
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for user - \"" + userId + "\"");
 			return response;
 		}
 		catch(UserNotFound userNotFound)

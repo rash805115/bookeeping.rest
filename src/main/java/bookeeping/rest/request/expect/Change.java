@@ -2,5 +2,5 @@ package bookeeping.rest.request.expect;
 
 public enum Change
 {
-	version, versionchangetype
+	version, versionchangetype, commitid
 }
