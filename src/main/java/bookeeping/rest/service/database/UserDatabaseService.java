@@ -29,7 +29,7 @@ public class UserDatabaseService
 		return UserDatabaseService.userDatabaseService;
 	}
 	
-	public Response createUser(String userId, Map<String, Object> userProperties)
+	public Response createNewUser(String userId, Map<String, Object> userProperties)
 	{
 		Response response = new Response();
 		try

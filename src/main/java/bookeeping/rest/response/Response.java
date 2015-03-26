@@ -83,4 +83,18 @@ public class Response
 			return null;
 		}
 	}
+	
+	public String addData(JSONObject data)
+	{
+		try
+		{
+			this.response.put("data", data);
+			return this.getResponseString();
+		}
+		catch (JSONException jsonException)
+		{
+			jsonException.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -8,10 +8,12 @@ import bookeeping.backend.exception.DirectoryNotFound;
 import bookeeping.backend.exception.DuplicateFile;
 import bookeeping.backend.exception.FileNotFound;
 import bookeeping.backend.exception.FilesystemNotFound;
+import bookeeping.backend.exception.NodeNotFound;
+import bookeeping.backend.exception.NodeUnavailable;
 import bookeeping.backend.exception.UserNotFound;
 import bookeeping.backend.exception.VersionNotFound;
-import bookeeping.backend.file.FilePermission;
 import bookeeping.rest.exception.InvalidFilePermission;
+import bookeeping.rest.request.expect.FilePermission;
 import bookeeping.rest.response.HttpCodes;
 import bookeeping.rest.response.Response;
 
@@ -35,16 +37,16 @@ public class FileDatabaseService
 		return FileDatabaseService.fileDatabaseService;
 	}
 	
-	public Response createNewFile(String commitId, String filePath, String fileName, String filesystemId, String userId, Map<String, Object> fileProperties)
+	public Response createNewFile(String commitId, String userId, String filesystemId, int filesystemVersion, String filePath, String fileName, Map<String, Object> fileProperties)
 	{
 		Response response = new Response();
 		try
 		{
-			this.fileService.createNewFile(commitId, filePath, fileName, filesystemId, userId, fileProperties);
-			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: file created - \"" + filePath + "/" + fileName + "\"");
+			this.fileService.createNewFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, fileProperties);
+			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: file created - \"" + (filePath.equals("/") ? "" : filePath) + "/" + fileName + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | VersionNotFound exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
@@ -56,46 +58,30 @@ public class FileDatabaseService
 		}
 	}
 	
-	public Response createNewVersion(String commitId, String userId, String filesystemId, String filePath, String fileName, Map<String, Object> changeMetadata, Map<String, Object> changedProperties)
-	{
-		Response response = new Response();
-		try
-		{
-			this.fileService.createNewVersion(commitId, userId, filesystemId, filePath, fileName, changeMetadata, changedProperties);
-			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: file version created for - \"" + filePath + "/" + fileName + "\"");
-			return response;
-		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound exception)
-		{
-			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
-			return response;
-		}
-	}
-	
-	public Response shareFile(String commitId, String userId, String filesystemId, String filePath, String fileName, String shareWithUserId, String filePermission)
+	public Response shareFile(String commitId, String userId, String filesystemId, int filesystemVersion, String filePath, String fileName, String shareWithUserId, String filePermission)
 	{
 		Response response = new Response();
 		try
 		{
 			FilePermission permission;
-			if(filePermission.equalsIgnoreCase(FilePermission.READ.name()))
+			if(filePermission.equalsIgnoreCase(FilePermission.read.name()))
 			{
-				permission = FilePermission.READ;
+				permission = FilePermission.read;
 			}
-			else if(filePermission.equalsIgnoreCase(FilePermission.WRITE.name()))
+			else if(filePermission.equalsIgnoreCase(FilePermission.write.name()))
 			{
-				permission = FilePermission.WRITE;
+				permission = FilePermission.write;
 			}
 			else
 			{
 				throw new InvalidFilePermission("ERROR: File permission is not valid - \"" + filePermission + "\"");
 			}
 			
-			this.fileService.shareFile(commitId, userId, filesystemId, filePath, fileName, shareWithUserId, permission);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file shared - \"" + filePath + "/" + fileName + "\" with user - \"" + shareWithUserId + "\"");
+			this.fileService.shareFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, shareWithUserId, permission.name());
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file shared - \"" + (filePath.equals("/") ? "" : filePath) + "/" + fileName + "\" with user - \"" + shareWithUserId + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound | VersionNotFound exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
@@ -107,48 +93,32 @@ public class FileDatabaseService
 		}
 	}
 	
-	public Response unshareFile(String commitId, String userId, String filesystemId, String filePath, String fileName, String unshareWithUserId)
+	public Response unshareFile(String commitId, String userId, String filesystemId, int filesystemVersion, String filePath, String fileName, String unshareWithUserId)
 	{
 		Response response = new Response();
 		try
 		{
-			this.fileService.unshareFile(commitId, userId, filesystemId, filePath, fileName, unshareWithUserId);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file un-shared - \"" + filePath + "/" + fileName + "\" with user - \"" + unshareWithUserId + "\"");
+			this.fileService.unshareFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, unshareWithUserId);
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file un-shared - \"" + (filePath.equals("/") ? "" : filePath) + "/" + fileName + "\" with user - \"" + unshareWithUserId + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound | VersionNotFound exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
 		}
 	}
 	
-	public Response deleteFileTemporarily(String commitId, String userId, String filesystemId, String filePath, String fileName)
+	public Response restoreFile(String commitId, String userId, String filesystemId, int filesystemVersion, String filePath, String fileName, String nodeIdToBeRestored)
 	{
 		Response response = new Response();
 		try
 		{
-			this.fileService.deleteFileTemporarily(commitId, userId, filesystemId, filePath, fileName);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file temporarily deleted - \"" + filePath + "/" + fileName + "\"");
+			this.fileService.restoreFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, nodeIdToBeRestored);
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file restored - \"" + (filePath.equals("/") ? "" : filePath) + "/" + fileName + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound exception)
-		{
-			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
-			return response;
-		}
-	}
-	
-	public Response restoreTemporaryDeletedFile(String commitId, String userId, String filesystemId, String filePath, String fileName, String previousCommitId)
-	{
-		Response response = new Response();
-		try
-		{
-			this.fileService.restoreTemporaryDeletedFile(commitId, userId, filesystemId, filePath, fileName, previousCommitId);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file restored - \"" + filePath + "/" + fileName + "\"");
-			return response;
-		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound | VersionNotFound | NodeNotFound | NodeUnavailable exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
@@ -160,16 +130,16 @@ public class FileDatabaseService
 		}
 	}
 	
-	public Response moveFile(String commitId, String userId, String filesystemId, String oldFilePath, String oldFileName, String newFilePath, String newFileName)
+	public Response moveFile(String commitId, String userId, String filesystemId, int filesystemVersion, String oldFilePath, String oldFileName, String newFilePath, String newFileName)
 	{
 		Response response = new Response();
 		try
 		{
-			this.fileService.moveFile(commitId, userId, filesystemId, oldFilePath, oldFileName, newFilePath, newFileName);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file moved to - \"" + newFilePath + "/" + newFileName + "\"");
+			this.fileService.moveFile(commitId, userId, filesystemId, filesystemVersion, oldFilePath, oldFileName, newFilePath, newFileName);
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: file moved to - \"" + (newFilePath.equals("/") ? "" : newFilePath) + "/" + newFileName + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound | VersionNotFound exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
@@ -181,14 +151,14 @@ public class FileDatabaseService
 		}
 	}
 	
-	public Response getFile(String userId, String filesystemId, String filePath, String fileName, int version)
+	public Response getFile(String userId, String filesystemId, int filesystemVersion, String filePath, String fileName)
 	{
 		Response response = new Response();
 		try
 		{
-			Map<String, Object> retrievedProperties = this.fileService.getFile(userId, filesystemId, filePath, fileName, version);
+			Map<String, Object> retrievedProperties = this.fileService.getFile(userId, filesystemId, filesystemVersion, filePath, fileName);
 			response.addData(retrievedProperties);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for file - \"" + filePath + "/" +  fileName + "\"");
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for file - \"" + (filePath.equals("/") ? "" : filePath) + "/" + fileName + "\"");
 			return response;
 		}
 		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | FileNotFound | VersionNotFound exception)

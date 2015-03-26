@@ -6,8 +6,9 @@ import bookeeping.backend.database.service.FilesystemService;
 import bookeeping.backend.database.service.neo4jrest.impl.FilesystemServiceImpl;
 import bookeeping.backend.exception.DuplicateFilesystem;
 import bookeeping.backend.exception.FilesystemNotFound;
+import bookeeping.backend.exception.NodeNotFound;
+import bookeeping.backend.exception.NodeUnavailable;
 import bookeeping.backend.exception.UserNotFound;
-import bookeeping.backend.exception.VersionNotFound;
 import bookeeping.rest.response.HttpCodes;
 import bookeeping.rest.response.Response;
 
@@ -31,12 +32,12 @@ public class FilesystemDatabaseService
 		return FilesystemDatabaseService.filesystemDatabaseService;
 	}
 	
-	public Response createFilesystem(String userId, String filesystemId, Map<String, Object> filesystemProperties)
+	public Response createNewFilesystem(String commitId, String userId, String filesystemId, Map<String, Object> filesystemProperties)
 	{
 		Response response = new Response();
 		try
 		{
-			this.filesystemService.createNewFilesystem(filesystemId, userId, filesystemProperties);
+			this.filesystemService.createNewFilesystem(commitId, userId, filesystemId, filesystemProperties);
 			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: filesystem created - \"" + filesystemId + "\"");
 			return response;
 		}
@@ -52,49 +53,16 @@ public class FilesystemDatabaseService
 		}
 	}
 	
-	public Response createNewVersion(String userId, String filesystemId, Map<String, Object> changeMetadata, Map<String, Object> changedProperties)
+	public Response restoreFilesystem(String commitId, String userId, String filesystemId, String nodeIdToBeRestored)
 	{
 		Response response = new Response();
 		try
 		{
-			this.filesystemService.createNewVersion(userId, filesystemId, changeMetadata, changedProperties);
-			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: filesystem version created for - \"" + filesystemId + "\"");
-			return response;
-		}
-		catch (UserNotFound | FilesystemNotFound exception)
-		{
-			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
-			return response;
-		}
-	}
-	
-	public Response deleteFilesystemTemporarily(String userId, String filesystemId)
-	{
-		Response response = new Response();
-		try
-		{
-			this.filesystemService.deleteFilesystemTemporarily(userId, filesystemId);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: filesystem temporarily deleted - \"" + filesystemId + "\"");
-			return response;
-			
-		}
-		catch (UserNotFound | FilesystemNotFound exception)
-		{
-			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
-			return response;
-		}
-	}
-	
-	public Response restoreTemporaryDeletedFilesystem(String userId, String filesystemId)
-	{
-		Response response = new Response();
-		try
-		{
-			this.filesystemService.restoreTemporaryDeletedFilesystem(userId, filesystemId);
+			this.filesystemService.restoreFilesystem(commitId, userId, filesystemId, nodeIdToBeRestored);
 			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: filesystem restored - \"" + filesystemId + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | NodeNotFound | NodeUnavailable exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
@@ -106,17 +74,17 @@ public class FilesystemDatabaseService
 		}
 	}
 	
-	public Response getFilesystem(String userId, String filesystemId, int version)
+	public Response getFilesystem(String userId, String filesystemId)
 	{
 		Response response = new Response();
 		try
 		{
-			Map<String, Object> retrievedProperties = this.filesystemService.getFilesystem(userId, filesystemId, version);
+			Map<String, Object> retrievedProperties = this.filesystemService.getFilesystem(userId, filesystemId);
 			response.addData(retrievedProperties);
 			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for filesystem - \"" + filesystemId + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | VersionNotFound exception)
+		catch (UserNotFound | FilesystemNotFound exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;

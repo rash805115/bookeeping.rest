@@ -19,20 +19,20 @@ $(document).ready(function()
 	});
 	
 	$("#sendGetUser").click(function()
+	{
+		var data = '{"username": "rash"}';
+		$.ajax(
+		{
+			url: "http://localhost:8080/bookeeping.rest/api/user/info",
+			async: false,
+			type : "post",
+			data : data,
+			contentType : "application/json",
+			dataType : "json",
+			success: function(response)
 			{
-				var data = '{"username": "rash"}';
-				$.ajax(
-				{
-					url: "http://localhost:8080/bookeeping.rest/api/user/info",
-					async: false,
-					type : "post",
-					data : data,
-					contentType : "application/json",
-					dataType : "json",
-					success: function(response)
-					{
-						$("#responseGetUser").html(JSON.stringify(response));
-					}
-				});
-			});
+				$("#responseGetUser").html(JSON.stringify(response));
+			}
+		});
+	});
 });

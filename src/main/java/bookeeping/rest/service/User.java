@@ -26,7 +26,7 @@ public class User
 	@Path("/create")
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String createUser(InputStream inputStream)
+	public String createNewUser(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -34,8 +34,8 @@ public class User
 			Request request = new Request(inputStream);
 			Map<String, Object> requestMap = request.getRequestMap();
 			
-			String username = (String) requestMap.get(UserProperty.username.name());
-			if(username == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"username\"");
+			String userId = (String) requestMap.get(UserProperty.userid.name());
+			if(userId == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId\"");
 			
 			Map<String, Object> userProperties = new HashMap<String, Object>();
 			String[] optionalProperties = {
@@ -48,7 +48,7 @@ public class User
 				if(value != null) userProperties.put(key, value);
 			}
 			
-			return UserDatabaseService.getInstance().createUser(username, userProperties).getResponseString();
+			return UserDatabaseService.getInstance().createNewUser(userId, userProperties).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{
@@ -72,10 +72,10 @@ public class User
 			Request request = new Request(inputStream);
 			Map<String, Object> requestMap = request.getRequestMap();
 			
-			String username = (String) requestMap.get(UserProperty.username.name());
-			if(username == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"username\"");
+			String userId = (String) requestMap.get(UserProperty.userid.name());
+			if(userId == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId\"");
 			
-			return UserDatabaseService.getInstance().getUser(username).getResponseString();
+			return UserDatabaseService.getInstance().getUser(userId).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{

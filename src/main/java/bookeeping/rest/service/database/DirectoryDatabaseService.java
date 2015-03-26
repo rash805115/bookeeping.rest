@@ -7,6 +7,8 @@ import bookeeping.backend.database.service.neo4jrest.impl.DirectoryServiceImpl;
 import bookeeping.backend.exception.DirectoryNotFound;
 import bookeeping.backend.exception.DuplicateDirectory;
 import bookeeping.backend.exception.FilesystemNotFound;
+import bookeeping.backend.exception.NodeNotFound;
+import bookeeping.backend.exception.NodeUnavailable;
 import bookeeping.backend.exception.UserNotFound;
 import bookeeping.backend.exception.VersionNotFound;
 import bookeeping.rest.response.HttpCodes;
@@ -32,16 +34,16 @@ public class DirectoryDatabaseService
 		return DirectoryDatabaseService.directoryDatabaseService;
 	}
 	
-	public Response createNewDirectory(String commitId, String directoryPath, String directoryName, String filesystemId, String userId, Map<String, Object> directoryProperties)
+	public Response createNewDirectory(String commitId, String userId, String filesystemId, int filesystemVersion, String directoryPath, String directoryName, Map<String, Object> directoryProperties)
 	{
 		Response response = new Response();
 		try
 		{
-			this.directoryService.createNewDirectory(commitId, directoryPath, directoryName, filesystemId, userId, directoryProperties);
-			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: directory created - \"" + directoryPath + "/" + directoryName + "\"");
+			this.directoryService.createNewDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, directoryProperties);
+			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: directory created - \"" + (directoryPath.equals("/") ? "" : directoryPath) + "/" + directoryName + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | VersionNotFound exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
@@ -53,48 +55,16 @@ public class DirectoryDatabaseService
 		}
 	}
 	
-	public Response createNewVersion(String commitId, String userId, String filesystemId, String directoryPath, String directoryName, Map<String, Object> changeMetadata, Map<String, Object> changedProperties)
+	public Response restoreDirectory(String commitId, String userId, String filesystemId, int filesystemVersion, String directoryPath, String directoryName, String nodeIdToBeRestored)
 	{
 		Response response = new Response();
 		try
 		{
-			this.directoryService.createNewVersion(commitId, userId, filesystemId, directoryPath, directoryName, changeMetadata, changedProperties);
-			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: directory version created for - \"" + directoryPath + "/" + directoryName + "\"");
+			this.directoryService.restoreDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, nodeIdToBeRestored);
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: directory restored - \"" + (directoryPath.equals("/") ? "" : directoryPath) + "/" + directoryName + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound exception)
-		{
-			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
-			return response;
-		}
-	}
-	
-	public Response deleteDirectoryTemporarily(String commitId, String userId, String filesystemId, String directoryPath, String directoryName)
-	{
-		Response response = new Response();
-		try
-		{
-			this.directoryService.deleteDirectoryTemporarily(commitId, userId, filesystemId, directoryPath, directoryName);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: directory temporarily deleted - \"" + directoryPath + "/" + directoryName + "\"");
-			return response;
-		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound exception)
-		{
-			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
-			return response;
-		}
-	}
-	
-	public Response restoreTemporaryDeletedDirectory(String commitId, String userId, String filesystemId, String directoryPath, String directoryName, String previousCommitId)
-	{
-		Response response = new Response();
-		try
-		{
-			this.directoryService.restoreTemporaryDeletedDirectory(commitId, userId, filesystemId, directoryPath, directoryName, previousCommitId);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: directory restored - \"" + directoryPath + "/" + directoryName + "\"");
-			return response;
-		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | VersionNotFound | NodeNotFound | NodeUnavailable exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
@@ -106,16 +76,16 @@ public class DirectoryDatabaseService
 		}
 	}
 	
-	public Response moveDirectory(String commitId, String userId, String filesystemId, String oldDirectoryPath, String oldDirectoryName, String newDirectoryPath, String newDirectoryName)
+	public Response moveDirectory(String commitId, String userId, String filesystemId, int filesystemVersion, String oldDirectoryPath, String oldDirectoryName, String newDirectoryPath, String newDirectoryName)
 	{
 		Response response = new Response();
 		try
 		{
-			this.directoryService.moveDirectory(commitId, userId, filesystemId, oldDirectoryPath, oldDirectoryName, newDirectoryPath, newDirectoryName);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: directory moved to - \"" + newDirectoryPath + "/" + newDirectoryName + "\"");
+			this.directoryService.moveDirectory(commitId, userId, filesystemId, filesystemVersion, oldDirectoryPath, oldDirectoryName, newDirectoryPath, newDirectoryName);
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: directory moved to - \"" + (newDirectoryPath.equals("/") ? "" : newDirectoryPath) + "/" + newDirectoryName + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound exception)
+		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | VersionNotFound exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
@@ -127,14 +97,14 @@ public class DirectoryDatabaseService
 		}
 	}
 	
-	public Response getDirectory(String userId, String filesystemId, String directoryPath, String directoryName, int version)
+	public Response getDirectory(String userId, String filesystemId, int filesystemVersion, String directoryPath, String directoryName)
 	{
 		Response response = new Response();
 		try
 		{
-			Map<String, Object> retrievedProperties = this.directoryService.getDirectory(userId, filesystemId, directoryPath, directoryName, version);
+			Map<String, Object> retrievedProperties = this.directoryService.getDirectory(userId, filesystemId, filesystemVersion, directoryPath, directoryName);
 			response.addData(retrievedProperties);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for directory - \"" + directoryPath + "/" +  directoryName + "\"");
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for directory - \"" + (directoryPath.equals("/") ? "" : directoryPath) + "/" + directoryName + "\"");
 			return response;
 		}
 		catch (UserNotFound | FilesystemNotFound | DirectoryNotFound | VersionNotFound exception)
