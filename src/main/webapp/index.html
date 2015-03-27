@@ -63,6 +63,20 @@
 							 'http://localhost:8080/bookeeping.rest/api/user/info'
 						</pre>
 					</td>
+					
+					<td>Filesystem Info</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+								"userId": "rash",
+							    "filesystemId": "rash-filesystem-1"
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/filesystem/info'
+						</pre>
+					</td>
 				</tr>
 			</table>
 		</div>

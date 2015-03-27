@@ -34,9 +34,16 @@ public class Filesystem
 			Request request = new Request(inputStream);
 			JSONObject requestJson = request.getRequestObject();
 			
-			String userId = (String) requestJson.get(UserProperty.userid.name());
-			String filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
-			if(userId == null || filesystemId == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId\"");
+			String userId = null, filesystemId = null;
+			try
+			{
+				userId = (String) requestJson.get(UserProperty.userid.name());
+				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
+			}
+			catch(JSONException jsonException)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId\"");
+			}
 			
 			return FilesystemDatabaseService.getInstance().getFilesystem(userId, filesystemId).getResponseString();
 		}
