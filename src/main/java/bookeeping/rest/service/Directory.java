@@ -35,13 +35,20 @@ public class Directory
 			Request request = new Request(inputStream);
 			JSONObject requestJson = request.getRequestObject();
 			
-			String userId = (String) requestJson.get(UserProperty.userid.name());
-			String filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
-			int filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemversion.name());
-			String directoryPath = (String) requestJson.get(DirectoryProperty.directorypath.name());
-			String directoryName = (String) requestJson.get(DirectoryProperty.directoryname.name());
-			
-			if(userId == null || filesystemId == null || filesystemVersion < 0 || directoryPath == null || directoryName == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId | filesystemVersion | directoryPath | directoryName\"");
+			String userId = null, filesystemId = null, directoryPath = null, directoryName = null;
+			int filesystemVersion = -1;
+			try
+			{
+				userId = (String) requestJson.get(UserProperty.userid.name());
+				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
+				filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemversion.name());
+				directoryPath = (String) requestJson.get(DirectoryProperty.directorypath.name());
+				directoryName = (String) requestJson.get(DirectoryProperty.directoryname.name());
+			}
+			catch(JSONException jsonException)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId | filesystemVersion | directoryPath | directoryName\"");
+			} 
 			
 			return DirectoryDatabaseService.getInstance().getDirectory(userId, filesystemId, filesystemVersion, directoryPath, directoryName).getResponseString();
 		}

@@ -35,12 +35,20 @@ public class File
 			Request request = new Request(inputStream);
 			JSONObject requestJson = request.getRequestObject();
 			
-			String userId = (String) requestJson.get(UserProperty.userid.name());
-			String filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
-			int filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemversion.name());
-			String filePath = (String) requestJson.get(FileProperty.filepath.name());
-			String fileName = (String) requestJson.get(FileProperty.filename.name());
-			if(userId == null || filesystemId == null || filesystemVersion < 0 || filePath == null || fileName == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId | filesystemVersion | filePath | fileName\"");
+			String userId = null, filesystemId = null, filePath = null, fileName = null;
+			int filesystemVersion = -1;
+			try
+			{
+				userId = (String) requestJson.get(UserProperty.userid.name());
+				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
+				filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemversion.name());
+				filePath = (String) requestJson.get(FileProperty.filepath.name());
+				fileName = (String) requestJson.get(FileProperty.filename.name());
+			}
+			catch(JSONException jsonException)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId | filesystemVersion | filePath | fileName\"");
+			}
 			
 			return FileDatabaseService.getInstance().getFile(userId, filesystemId, filesystemVersion, filePath, fileName).getResponseString();
 		}

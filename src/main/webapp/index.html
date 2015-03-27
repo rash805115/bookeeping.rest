@@ -50,7 +50,9 @@
 							 'http://localhost:8080/bookeeping.rest/api/user/create'
 						</pre>
 					</td>
-					
+				</tr>
+				
+				<tr>
 					<td>User Info</td>
 					<td>
 						<pre>
@@ -63,7 +65,9 @@
 							 'http://localhost:8080/bookeeping.rest/api/user/info'
 						</pre>
 					</td>
-					
+				</tr>
+				
+				<tr>
 					<td>Filesystem Info</td>
 					<td>
 						<pre>
@@ -75,6 +79,44 @@
 							    "filesystemId": "rash-filesystem-1"
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/filesystem/info'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Directory Info</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+								"userId": "rash",
+							    "filesystemId": "rash-filesystem-1",
+							    "filesystemVersion": 0,
+							    "directoryPath": "/Music",
+							    "directoryName": "Inspirational"
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/directory/info'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>File Info</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+								"userId": "rash",
+							    "filesystemId": "rash-filesystem-1",
+							    "filesystemVersion": 0,
+							    "filePath": "/Music/Inspirational",
+							    "fileName": "bourne-theme.mp3"
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/file/info'
 						</pre>
 					</td>
 				</tr>
