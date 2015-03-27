@@ -20,7 +20,7 @@ $(document).ready(function()
 	
 	$("#sendGetNodeVersion").click(function()
 	{
-		var data = '{"nodeId": "0", "version": 0}';
+		var data = '{"nodeId": "4", "version": 1}';
 		$.ajax(
 		{
 			url: "http://localhost:8080/bookeeping.rest/api/node/version/info",

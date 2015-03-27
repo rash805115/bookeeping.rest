@@ -1,7 +1,6 @@
 package bookeeping.rest.service;
 
 import java.io.InputStream;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -10,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import bookeeping.rest.exception.MandatoryPropertyNotFound;
 import bookeeping.rest.request.Request;
@@ -33,13 +33,13 @@ public class Directory
 		try
 		{
 			Request request = new Request(inputStream);
-			Map<String, Object> requestMap = request.getRequestMap();
+			JSONObject requestJson = request.getRequestObject();
 			
-			String userId = (String) requestMap.get(UserProperty.userid.name());
-			String filesystemId = (String) requestMap.get(FilesystemProperty.filesystemid.name());
-			int filesystemVersion = (int) requestMap.get(FilesystemProperty.filesystemversion.name());
-			String directoryPath = (String) requestMap.get(DirectoryProperty.directorypath.name());
-			String directoryName = (String) requestMap.get(DirectoryProperty.directoryname.name());
+			String userId = (String) requestJson.get(UserProperty.userid.name());
+			String filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
+			int filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemversion.name());
+			String directoryPath = (String) requestJson.get(DirectoryProperty.directorypath.name());
+			String directoryName = (String) requestJson.get(DirectoryProperty.directoryname.name());
 			
 			if(userId == null || filesystemId == null || filesystemVersion < 0 || directoryPath == null || directoryName == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId | filesystemVersion | directoryPath | directoryName\"");
 			

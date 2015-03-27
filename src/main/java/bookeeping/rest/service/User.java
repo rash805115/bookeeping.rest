@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import bookeeping.rest.exception.MandatoryPropertyNotFound;
 import bookeeping.rest.request.Request;
@@ -32,10 +33,17 @@ public class User
 		try
 		{
 			Request request = new Request(inputStream);
-			Map<String, Object> requestMap = request.getRequestMap();
+			JSONObject requestJson = request.getRequestObject();
 			
-			String userId = (String) requestMap.get(UserProperty.userid.name());
-			if(userId == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId\"");
+			String userId = null;
+			try
+			{
+				userId = (String) requestJson.get(UserProperty.userid.name());
+			}
+			catch(JSONException jsonException)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId\"");
+			}
 			
 			Map<String, Object> userProperties = new HashMap<String, Object>();
 			String[] optionalProperties = {
@@ -44,8 +52,12 @@ public class User
 			};
 			for(String key : optionalProperties)
 			{
-				Object value = requestMap.get(key);
-				if(value != null) userProperties.put(key, value);
+				try
+				{
+					String value = (String) requestJson.get(key);
+					userProperties.put(key, value);
+				}
+				catch(JSONException jsonException) {}
 			}
 			
 			return UserDatabaseService.getInstance().createNewUser(userId, userProperties).getResponseString();
@@ -70,10 +82,17 @@ public class User
 		try
 		{
 			Request request = new Request(inputStream);
-			Map<String, Object> requestMap = request.getRequestMap();
+			JSONObject requestJson = request.getRequestObject();
 			
-			String userId = (String) requestMap.get(UserProperty.userid.name());
-			if(userId == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId\"");
+			String userId = null;
+			try
+			{
+				userId = (String) requestJson.get(UserProperty.userid.name());
+			}
+			catch(JSONException jsonException)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId\"");
+			}
 			
 			return UserDatabaseService.getInstance().getUser(userId).getResponseString();
 		}

@@ -44,9 +44,9 @@ public class GenericDatabaseService
 			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: node versioned - \"" + nodeId + "\"");
 			return response;
 		}
-		catch (NodeNotFound nodeNotFound)
+		catch (NodeNotFound | NodeUnavailable e)
 		{
-			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", nodeNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", e.getMessage());
 			return response;
 		}
 	}
@@ -78,7 +78,7 @@ public class GenericDatabaseService
 			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for node - \"" + nodeId + " (v=" + version + ")\"");
 			return response;
 		}
-		catch (NodeNotFound | VersionNotFound e)
+		catch (NodeNotFound | VersionNotFound | NodeUnavailable e)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", e.getMessage());
 			return response;

@@ -2,6 +2,17 @@
 	<head>
 		<title>BooKeeping.REST</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<style>
+			#commandTable
+			{
+				border: 1px solid black;
+			}
+			
+			#commandTable th, td
+			{
+				border: 1px solid black;
+			}
+		</style>
 	</head>
 	
 	<body>
@@ -15,31 +26,45 @@
 		<br /><br />
 		
 		<div>
-			<ul>
-				<li>
-					<a href = "user.html">User Test</a>
-				</li>
+			<h3>Common cURL Commands:</h3>
+			
+			<table id="commandTable">
+				<tr>
+					<th>Command Name</th>
+					<th>cURL Command</th>
+				</tr>
 				
-				<li>
-					<a href = "filesystem.html">Filesystem Test</a>
-				</li>
-				
-				<li>
-					<a href = "directory.html">Directory Test</a>
-				</li>
-				
-				<li>
-					<a href = "file.html">File Test</a>
-				</li>
-				
-				<li>
-					<a href = "commit.html">Commit Test</a>
-				</li>
-				
-				<li>
-					<a href = "node.html">Node Test</a>
-				</li>
-			</ul>
+				<tr>
+					<td>User Create</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							    "userId": "john",
+							    "firstName": "John",
+							    "lastName": "Doe",
+							    "primaryEmail": "johndoe@example.com"
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/user/create'
+						</pre>
+					</td>
+					
+					<td>User Info</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+								"userId": "rash"
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/user/info'
+						</pre>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</body>
 </html>

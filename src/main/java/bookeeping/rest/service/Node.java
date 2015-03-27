@@ -1,7 +1,6 @@
 package bookeeping.rest.service;
 
 import java.io.InputStream;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -10,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import bookeeping.rest.exception.MandatoryPropertyNotFound;
 import bookeeping.rest.request.Request;
@@ -31,9 +31,9 @@ public class Node
 		try
 		{
 			Request request = new Request(inputStream);
-			Map<String, Object> requestMap = request.getRequestMap();
+			JSONObject requestJson = request.getRequestObject();
 			
-			String nodeId = (String) requestMap.get(GenericProperty.nodeid.name());
+			String nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
 			if(nodeId == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId\"");
 			
 			return GenericDatabaseService.getInstance().getNode(nodeId).getResponseString();
@@ -58,10 +58,10 @@ public class Node
 		try
 		{
 			Request request = new Request(inputStream);
-			Map<String, Object> requestMap = request.getRequestMap();
+			JSONObject requestJson = request.getRequestObject();
 			
-			String nodeId = (String) requestMap.get(GenericProperty.nodeid.name());
-			int version = (int) requestMap.get(GenericProperty.version.name());
+			String nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+			int version = (int) requestJson.get(GenericProperty.version.name());
 			if(nodeId == null || version < 0) throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId | version\"");
 			
 			return GenericDatabaseService.getInstance().getNodeVersion(nodeId, version).getResponseString();
