@@ -120,6 +120,37 @@
 						</pre>
 					</td>
 				</tr>
+				
+				<tr>
+					<td>Node Info</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "nodeId": "4"
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/node/info'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Node Version Info</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "nodeId": "4",
+							  "version": 0
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/node/version/info'
+						</pre>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</body>

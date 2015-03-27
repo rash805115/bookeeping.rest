@@ -40,9 +40,9 @@ public class User
 			{
 				userId = (String) requestJson.get(UserProperty.userid.name());
 			}
-			catch(JSONException jsonException)
+			catch(JSONException | ClassCastException e)
 			{
-				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId\"");
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String)\"");
 			}
 			
 			Map<String, Object> userProperties = new HashMap<String, Object>();
@@ -58,6 +58,10 @@ public class User
 					userProperties.put(key, value);
 				}
 				catch(JSONException jsonException) {}
+				catch(ClassCastException e)
+				{
+					throw new ClassCastException("ERROR: Optional property must be string.");
+				}
 			}
 			
 			return UserDatabaseService.getInstance().createNewUser(userId, userProperties).getResponseString();
@@ -69,6 +73,10 @@ public class User
 		catch (MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
 			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+		}
+		catch(ClassCastException classCastException)
+		{
+			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", classCastException.getMessage());
 		}
 	}
 	
@@ -89,9 +97,9 @@ public class User
 			{
 				userId = (String) requestJson.get(UserProperty.userid.name());
 			}
-			catch(JSONException jsonException)
+			catch(JSONException | ClassCastException e)
 			{
-				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId\"");
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String)\"");
 			}
 			
 			return UserDatabaseService.getInstance().getUser(userId).getResponseString();

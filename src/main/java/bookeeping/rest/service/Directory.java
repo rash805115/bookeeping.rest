@@ -45,9 +45,9 @@ public class Directory
 				directoryPath = (String) requestJson.get(DirectoryProperty.directorypath.name());
 				directoryName = (String) requestJson.get(DirectoryProperty.directoryname.name());
 			}
-			catch(JSONException jsonException)
+			catch(JSONException | ClassCastException e)
 			{
-				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId | filesystemVersion | directoryPath | directoryName\"");
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | directoryPath(String) | directoryName(String)\"");
 			} 
 			
 			return DirectoryDatabaseService.getInstance().getDirectory(userId, filesystemId, filesystemVersion, directoryPath, directoryName).getResponseString();

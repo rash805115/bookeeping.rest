@@ -45,9 +45,9 @@ public class File
 				filePath = (String) requestJson.get(FileProperty.filepath.name());
 				fileName = (String) requestJson.get(FileProperty.filename.name());
 			}
-			catch(JSONException jsonException)
+			catch(JSONException | ClassCastException e)
 			{
-				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId | filesystemVersion | filePath | fileName\"");
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | filePath(String) | fileName(String)\"");
 			}
 			
 			return FileDatabaseService.getInstance().getFile(userId, filesystemId, filesystemVersion, filePath, fileName).getResponseString();

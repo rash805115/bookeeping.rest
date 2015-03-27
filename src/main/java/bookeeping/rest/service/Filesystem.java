@@ -40,9 +40,9 @@ public class Filesystem
 				userId = (String) requestJson.get(UserProperty.userid.name());
 				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
 			}
-			catch(JSONException jsonException)
+			catch(JSONException | ClassCastException e)
 			{
-				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId | filesystemId\"");
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String)\"");
 			}
 			
 			return FilesystemDatabaseService.getInstance().getFilesystem(userId, filesystemId).getResponseString();

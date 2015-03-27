@@ -33,8 +33,15 @@ public class Node
 			Request request = new Request(inputStream);
 			JSONObject requestJson = request.getRequestObject();
 			
-			String nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
-			if(nodeId == null) throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId\"");
+			String nodeId = null;
+			try
+			{
+				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+			}
+			catch(JSONException | ClassCastException e)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String)\"");
+			}
 			
 			return GenericDatabaseService.getInstance().getNode(nodeId).getResponseString();
 		}
@@ -60,9 +67,17 @@ public class Node
 			Request request = new Request(inputStream);
 			JSONObject requestJson = request.getRequestObject();
 			
-			String nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
-			int version = (int) requestJson.get(GenericProperty.version.name());
-			if(nodeId == null || version < 0) throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId | version\"");
+			String nodeId = null;
+			int version = -1;
+			try
+			{
+				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+				version = (int) requestJson.get(GenericProperty.version.name());
+			}
+			catch(JSONException | ClassCastException e)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String) | version(Integer)\"");
+			}
 			
 			return GenericDatabaseService.getInstance().getNodeVersion(nodeId, version).getResponseString();
 		}
