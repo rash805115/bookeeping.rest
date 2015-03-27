@@ -151,6 +151,43 @@
 						</pre>
 					</td>
 				</tr>
+				
+				<tr>
+					<td>Commit - Filesystem Create</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 1",
+							  "Filesystem_Create": {
+							    "userId": "john",
+							    "filesystemId": "john-filesystem-1"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - Filesystem Version</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 2",
+							  "Node_Version": {
+							    "nodeId": "n"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</body>
