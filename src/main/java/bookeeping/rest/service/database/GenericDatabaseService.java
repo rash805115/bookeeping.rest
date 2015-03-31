@@ -41,7 +41,7 @@ public class GenericDatabaseService
 			Map<String, Object> responseProperty = new HashMap<String, Object>();
 			responseProperty.put(GenericProperty.nodeid.name(), versionNodeId);
 			response.addData(responseProperty);
-			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: node versioned - \"" + nodeId + "\"");
+			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: node versioned - \"" + nodeId + "\"");
 			return response;
 		}
 		catch (NodeNotFound | NodeUnavailable e)

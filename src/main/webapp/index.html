@@ -153,6 +153,42 @@
 				</tr>
 				
 				<tr>
+					<td>Commit - Node Version</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 2",
+							  "Node_Version": {
+							    "nodeId": "n"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - Node Delete</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 7",
+							  "Node_Delete": {
+							    "nodeId": "d"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
 					<td>Commit - Filesystem Create</td>
 					<td>
 						<pre>
@@ -172,16 +208,18 @@
 				</tr>
 				
 				<tr>
-					<td>Commit - Filesystem Version</td>
+					<td>Commit - Filesystem Restore</td>
 					<td>
 						<pre>
 							curl -i -X POST \
 							   -H "Content-Type:application/json" \
 							   -d \
 							'{
-							  "commitId": "John Commit 2",
-							  "Node_Version": {
-							    "nodeId": "n"
+							  "commitId": "John Commit 10",
+							  "Filesystem_Restore": {
+							    "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "nodeIdToBeRestored": "d"
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
