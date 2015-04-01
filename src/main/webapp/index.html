@@ -226,6 +226,191 @@
 						</pre>
 					</td>
 				</tr>
+				
+				<tr>
+					<td>Commit - Directory Create</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 11",
+							  "Directory_Create": {
+							    "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "filesystemVersion": 4,
+							    "directoryPath": "/Programs",
+							    "directoryName": "Java"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - Directory Restore</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 11",
+							  "Directory_Restore": {
+							   "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "filesystemVersion": 4,
+							    "directoryPath": "/Programs",
+							    "directoryName": "Java",
+							    "nodeIdToBeRestored": "j"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - Directory Move</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 11",
+							  "Directory_Move": {
+							   "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "filesystemVersion": 4,
+							    "oldDirectoryPath": "/Programs",
+							    "oldDirectoryName": "Java",
+							    "newDirectoryPath": "/Projects/Programs/Python",
+							    "newDirectoryName": "Common"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - File Create</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 11",
+							  "File_Create": {
+							   "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "filesystemVersion": 4,
+							    "filePath": "/Projects/Programs/Python/Common",
+							    "fileName": "line_count.py"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - File Restore</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 11",
+							  "File_Restore": {
+							    "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "filesystemVersion": 4,
+							    "filePath": "/Projects/Programs/Python/Common",
+							    "fileName": "line_count.py",
+							    "nodeIdToBeRestored": "l"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - File Move</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 11",
+							  "File_Move": {
+							    "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "filesystemVersion": 4,
+							    "oldFilePath": "/Projects/Programs/Python/Common",
+							    "oldFileName": "line_count.py",
+							    "newFilePath": "/",
+							    "newFileName": "data_count.py"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - File Share</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 12",
+							  "File_Share": {
+							    "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "filesystemVersion": 4,
+							    "filePath": "/",
+							    "fileName": "data_count.py",
+							    "shareWithUserId": "rash",
+							    "filePermission": "write"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Commit - File Unshare</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "commitId": "John Commit 12",
+							  "File_Unshare": {
+							    "userId": "john",
+							    "filesystemId": "john-filesystem-1",
+							    "filesystemVersion": 4,
+							    "filePath": "/",
+							    "fileName": "data_count.py",
+							    "unshareWithUserId": "rash"
+							  }
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</body>
