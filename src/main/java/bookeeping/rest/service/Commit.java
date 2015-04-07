@@ -1,9 +1,13 @@
 package bookeeping.rest.service;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -56,13 +60,40 @@ public class Commit
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"commitId(String)\"");
 			}
 			
-			boolean success = true;
-			@SuppressWarnings("unchecked") Iterator<String> keys = requestJson.keys();
-			while(keys.hasNext())
+			@SuppressWarnings("unchecked") Iterator<String> commitOrders = requestJson.keys();
+			List<Integer> sortedOrderList = new ArrayList<Integer>();
+			while(commitOrders.hasNext())
 			{
-				String key = keys.next();
-				CommitProperty commitProperty = CommitProperty.valueOf(key);
+				Integer order = Integer.parseInt(commitOrders.next());
+				sortedOrderList.add(order);
+			}
+			Collections.sort(sortedOrderList);
+			
+			boolean success = true;
+			for(Integer order : sortedOrderList)
+			{
+				JSONObject operationJson = requestJson.getJSONObject(order.toString());
+				String key = null;
+				try
+				{
+					key = (String) operationJson.keys().next();
+				}
+				catch(NoSuchElementException noSuchElementException)
+				{
+					throw new MandatoryPropertyNotFound("ERROR: Missing operation!");
+				}
+				
+				JSONObject commandJson = operationJson.getJSONObject(key);
 				Response operationResult = null;
+				CommitProperty commitProperty = null;
+				try
+				{
+					commitProperty = CommitProperty.valueOf(key);
+				}
+				catch(IllegalArgumentException illegalArgumentException)
+				{
+					throw new MandatoryPropertyNotFound("ERROR: Command is not valid! - \"" + key + "\"");
+				}
 				
 				switch(commitProperty)
 				{
@@ -70,11 +101,10 @@ public class Commit
 					{
 						try
 						{
-							JSONObject nodeVersionJson = requestJson.getJSONObject(CommitProperty.node_version.name());
 							String nodeId = null;
 							try
 							{
-								nodeId = (String) nodeVersionJson.get(GenericProperty.nodeid.name());
+								nodeId = (String) commandJson.get(GenericProperty.nodeid.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -93,11 +123,10 @@ public class Commit
 					{
 						try
 						{
-							JSONObject nodeDeleteJson = requestJson.getJSONObject(CommitProperty.node_delete.name());
 							String nodeId = null;
 							try
 							{
-								nodeId = (String) nodeDeleteJson.get(GenericProperty.nodeid.name());
+								nodeId = (String) commandJson.get(GenericProperty.nodeid.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -114,12 +143,11 @@ public class Commit
 					{
 						try
 						{
-							JSONObject filesystemCreateJson = requestJson.getJSONObject(CommitProperty.filesystem_create.name());
 							String userId = null, filesystemId = null;
 							try
 							{
-								userId = (String) filesystemCreateJson.get(UserProperty.userid.name());
-								filesystemId = (String) filesystemCreateJson.get(FilesystemProperty.filesystemid.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -137,13 +165,12 @@ public class Commit
 					{
 						try
 						{
-							JSONObject filesystemRestoreJson = requestJson.getJSONObject(CommitProperty.filesystem_restore.name());
 							String userId = null, filesystemId = null, nodeIdToBeRestored = null;
 							try
 							{
-								userId = (String) filesystemRestoreJson.get(UserProperty.userid.name());
-								filesystemId = (String) filesystemRestoreJson.get(FilesystemProperty.filesystemid.name());
-								nodeIdToBeRestored = (String) filesystemRestoreJson.get(GenericProperty.nodeidtoberestored.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								nodeIdToBeRestored = (String) commandJson.get(GenericProperty.nodeidtoberestored.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -160,16 +187,15 @@ public class Commit
 					{
 						try
 						{
-							JSONObject directoryCreateJson = requestJson.getJSONObject(CommitProperty.directory_create.name());
 							String userId = null, filesystemId = null, directoryPath = null, directoryName = null;
 							int filesystemVersion = -1;
 							try
 							{
-								userId = (String) directoryCreateJson.get(UserProperty.userid.name());
-								filesystemId = (String) directoryCreateJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) directoryCreateJson.get(FilesystemProperty.filesystemversion.name());
-								directoryPath = (String) directoryCreateJson.get(DirectoryProperty.directorypath.name());
-								directoryName = (String) directoryCreateJson.get(DirectoryProperty.directoryname.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
+								directoryPath = (String) commandJson.get(DirectoryProperty.directorypath.name());
+								directoryName = (String) commandJson.get(DirectoryProperty.directoryname.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -187,17 +213,16 @@ public class Commit
 					{
 						try
 						{
-							JSONObject directoryRestoreJson = requestJson.getJSONObject(CommitProperty.directory_restore.name());
 							String userId = null, filesystemId = null, directoryPath = null, directoryName = null, nodeIdToBeRestored = null;
 							int filesystemVersion = -1;
 							try
 							{
-								userId = (String) directoryRestoreJson.get(UserProperty.userid.name());
-								filesystemId = (String) directoryRestoreJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) directoryRestoreJson.get(FilesystemProperty.filesystemversion.name());
-								directoryPath = (String) directoryRestoreJson.get(DirectoryProperty.directorypath.name());
-								directoryName = (String) directoryRestoreJson.get(DirectoryProperty.directoryname.name());
-								nodeIdToBeRestored = (String) directoryRestoreJson.get(GenericProperty.nodeidtoberestored.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
+								directoryPath = (String) commandJson.get(DirectoryProperty.directorypath.name());
+								directoryName = (String) commandJson.get(DirectoryProperty.directoryname.name());
+								nodeIdToBeRestored = (String) commandJson.get(GenericProperty.nodeidtoberestored.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -214,18 +239,17 @@ public class Commit
 					{
 						try
 						{
-							JSONObject directoryMoveJson = requestJson.getJSONObject(CommitProperty.directory_move.name());
 							String userId = null, filesystemId = null, oldDirectoryPath = null, oldDirectoryName = null, newDirectoryPath = null, newDirectoryName = null;
 							int filesystemVersion = -1;
 							try
 							{
-								userId = (String) directoryMoveJson.get(UserProperty.userid.name());
-								filesystemId = (String) directoryMoveJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) directoryMoveJson.get(FilesystemProperty.filesystemversion.name());
-								oldDirectoryPath = (String) directoryMoveJson.get(DirectoryProperty.olddirectorypath.name());
-								oldDirectoryName = (String) directoryMoveJson.get(DirectoryProperty.olddirectoryname.name());
-								newDirectoryPath = (String) directoryMoveJson.get(DirectoryProperty.newdirectorypath.name());
-								newDirectoryName = (String) directoryMoveJson.get(DirectoryProperty.newdirectoryname.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
+								oldDirectoryPath = (String) commandJson.get(DirectoryProperty.olddirectorypath.name());
+								oldDirectoryName = (String) commandJson.get(DirectoryProperty.olddirectoryname.name());
+								newDirectoryPath = (String) commandJson.get(DirectoryProperty.newdirectorypath.name());
+								newDirectoryName = (String) commandJson.get(DirectoryProperty.newdirectoryname.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -242,16 +266,15 @@ public class Commit
 					{
 						try
 						{
-							JSONObject fileCreateJson = requestJson.getJSONObject(CommitProperty.file_create.name());
 							String userId = null, filesystemId = null, filePath = null, fileName = null;
 							int filesystemVersion = -1;
 							try
 							{
-								userId = (String) fileCreateJson.get(UserProperty.userid.name());
-								filesystemId = (String) fileCreateJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) fileCreateJson.get(FilesystemProperty.filesystemversion.name());
-								filePath = (String) fileCreateJson.get(FileProperty.filepath.name());
-								fileName = (String) fileCreateJson.get(FileProperty.filename.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
+								filePath = (String) commandJson.get(FileProperty.filepath.name());
+								fileName = (String) commandJson.get(FileProperty.filename.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -269,17 +292,16 @@ public class Commit
 					{
 						try
 						{
-							JSONObject fileRestoreJson = requestJson.getJSONObject(CommitProperty.file_restore.name());
 							String userId = null, filesystemId = null, filePath = null, fileName = null, nodeIdToBeRestored = null;
 							int filesystemVersion = -1;
 							try
 							{
-								userId = (String) fileRestoreJson.get(UserProperty.userid.name());
-								filesystemId = (String) fileRestoreJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) fileRestoreJson.get(FilesystemProperty.filesystemversion.name());
-								filePath = (String) fileRestoreJson.get(FileProperty.filepath.name());
-								fileName = (String) fileRestoreJson.get(FileProperty.filename.name());
-								nodeIdToBeRestored = (String) fileRestoreJson.get(GenericProperty.nodeidtoberestored.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
+								filePath = (String) commandJson.get(FileProperty.filepath.name());
+								fileName = (String) commandJson.get(FileProperty.filename.name());
+								nodeIdToBeRestored = (String) commandJson.get(GenericProperty.nodeidtoberestored.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -296,18 +318,17 @@ public class Commit
 					{
 						try
 						{
-							JSONObject fileMoveJson = requestJson.getJSONObject(CommitProperty.file_move.name());
 							String userId = null, filesystemId = null, oldFilePath = null, oldFileName = null, newFilePath = null, newFileName = null;
 							int filesystemVersion = -1;
 							try
 							{
-								userId = (String) fileMoveJson.get(UserProperty.userid.name());
-								filesystemId = (String) fileMoveJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) fileMoveJson.get(FilesystemProperty.filesystemversion.name());
-								oldFilePath = (String) fileMoveJson.get(FileProperty.oldfilepath.name());
-								oldFileName = (String) fileMoveJson.get(FileProperty.oldfilename.name());
-								newFilePath = (String) fileMoveJson.get(FileProperty.newfilepath.name());
-								newFileName = (String) fileMoveJson.get(FileProperty.newfilename.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
+								oldFilePath = (String) commandJson.get(FileProperty.oldfilepath.name());
+								oldFileName = (String) commandJson.get(FileProperty.oldfilename.name());
+								newFilePath = (String) commandJson.get(FileProperty.newfilepath.name());
+								newFileName = (String) commandJson.get(FileProperty.newfilename.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -324,18 +345,17 @@ public class Commit
 					{
 						try
 						{
-							JSONObject fileShareJson = requestJson.getJSONObject(CommitProperty.file_share.name());
 							String userId = null, filesystemId = null, filePath = null, fileName = null, shareWithUserId = null, filePermission = null;
 							int filesystemVersion = -1;
 							try
 							{
-								userId = (String) fileShareJson.get(UserProperty.userid.name());
-								filesystemId = (String) fileShareJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) fileShareJson.get(FilesystemProperty.filesystemversion.name());
-								filePath = (String) fileShareJson.get(FileProperty.filepath.name());
-								fileName = (String) fileShareJson.get(FileProperty.filename.name());
-								shareWithUserId = (String) fileShareJson.get(UserProperty.sharewithuserid.name());
-								filePermission = (String) fileShareJson.get(FileProperty.filepermission.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
+								filePath = (String) commandJson.get(FileProperty.filepath.name());
+								fileName = (String) commandJson.get(FileProperty.filename.name());
+								shareWithUserId = (String) commandJson.get(UserProperty.sharewithuserid.name());
+								filePermission = (String) commandJson.get(FileProperty.filepermission.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -352,17 +372,16 @@ public class Commit
 					{
 						try
 						{
-							JSONObject fileUnshareJson = requestJson.getJSONObject(CommitProperty.file_unshare.name());
 							String userId = null, filesystemId = null, filePath = null, fileName = null, unshareWithUserId = null;
 							int filesystemVersion = -1;
 							try
 							{
-								userId = (String) fileUnshareJson.get(UserProperty.userid.name());
-								filesystemId = (String) fileUnshareJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) fileUnshareJson.get(FilesystemProperty.filesystemversion.name());
-								filePath = (String) fileUnshareJson.get(FileProperty.filepath.name());
-								fileName = (String) fileUnshareJson.get(FileProperty.filename.name());
-								unshareWithUserId = (String) fileUnshareJson.get(UserProperty.unsharewithuserid.name());
+								userId = (String) commandJson.get(UserProperty.userid.name());
+								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
+								filePath = (String) commandJson.get(FileProperty.filepath.name());
+								fileName = (String) commandJson.get(FileProperty.filename.name());
+								unshareWithUserId = (String) commandJson.get(UserProperty.unsharewithuserid.name());
 							}
 							catch(JSONException | ClassCastException e)
 							{

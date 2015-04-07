@@ -161,8 +161,10 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 2",
-							  "Node_Version": {
-							    "nodeId": "n"
+							  0: {
+							  	"Node_Version": {
+								    "nodeId": "n"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -179,8 +181,10 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 7",
-							  "Node_Delete": {
-							    "nodeId": "d"
+							  0: {
+							  	"Node_Delete": {
+							    		"nodeId": "d"
+							  	}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -197,9 +201,11 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 1",
-							  "Filesystem_Create": {
-							    "userId": "john",
-							    "filesystemId": "john-filesystem-1"
+							  0: {
+							  	"Filesystem_Create": {
+								    "userId": "john",
+								    "filesystemId": "john-filesystem-1"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -216,10 +222,12 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 10",
-							  "Filesystem_Restore": {
-							    "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "nodeIdToBeRestored": "d"
+							  0: {
+							  	"Filesystem_Restore": {
+								    "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "nodeIdToBeRestored": "d"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -236,12 +244,14 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 11",
-							  "Directory_Create": {
-							    "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "filesystemVersion": 4,
-							    "directoryPath": "/Programs",
-							    "directoryName": "Java"
+							  0: {
+							  	"Directory_Create": {
+								    "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "filesystemVersion": 4,
+								    "directoryPath": "/Programs",
+								    "directoryName": "Java"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -258,13 +268,15 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 11",
-							  "Directory_Restore": {
-							   "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "filesystemVersion": 4,
-							    "directoryPath": "/Programs",
-							    "directoryName": "Java",
-							    "nodeIdToBeRestored": "j"
+							  0: {
+							  	"Directory_Restore": {
+								   "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "filesystemVersion": 4,
+								    "directoryPath": "/Programs",
+								    "directoryName": "Java",
+								    "nodeIdToBeRestored": "j"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -281,14 +293,16 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 11",
-							  "Directory_Move": {
-							   "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "filesystemVersion": 4,
-							    "oldDirectoryPath": "/Programs",
-							    "oldDirectoryName": "Java",
-							    "newDirectoryPath": "/Projects/Programs/Python",
-							    "newDirectoryName": "Common"
+							  0: {
+							  	"Directory_Move": {
+								   "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "filesystemVersion": 4,
+								    "oldDirectoryPath": "/Programs",
+								    "oldDirectoryName": "Java",
+								    "newDirectoryPath": "/Projects/Programs/Python",
+								    "newDirectoryName": "Common"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -305,12 +319,14 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 11",
-							  "File_Create": {
-							   "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "filesystemVersion": 4,
-							    "filePath": "/Projects/Programs/Python/Common",
-							    "fileName": "line_count.py"
+							  0: {
+							  	"File_Create": {
+								   "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "filesystemVersion": 4,
+								    "filePath": "/Projects/Programs/Python/Common",
+								    "fileName": "line_count.py"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -327,13 +343,15 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 11",
-							  "File_Restore": {
-							    "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "filesystemVersion": 4,
-							    "filePath": "/Projects/Programs/Python/Common",
-							    "fileName": "line_count.py",
-							    "nodeIdToBeRestored": "l"
+							  0: {
+							  	"File_Restore": {
+								    "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "filesystemVersion": 4,
+								    "filePath": "/Projects/Programs/Python/Common",
+								    "fileName": "line_count.py",
+								    "nodeIdToBeRestored": "l"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -350,14 +368,16 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 11",
-							  "File_Move": {
-							    "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "filesystemVersion": 4,
-							    "oldFilePath": "/Projects/Programs/Python/Common",
-							    "oldFileName": "line_count.py",
-							    "newFilePath": "/",
-							    "newFileName": "data_count.py"
+							  0: {
+							  	"File_Move": {
+								    "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "filesystemVersion": 4,
+								    "oldFilePath": "/Projects/Programs/Python/Common",
+								    "oldFileName": "line_count.py",
+								    "newFilePath": "/",
+								    "newFileName": "data_count.py"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -374,14 +394,16 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 12",
-							  "File_Share": {
-							    "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "filesystemVersion": 4,
-							    "filePath": "/",
-							    "fileName": "data_count.py",
-							    "shareWithUserId": "rash",
-							    "filePermission": "write"
+							  0: {
+							  	"File_Share": {
+								    "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "filesystemVersion": 4,
+								    "filePath": "/",
+								    "fileName": "data_count.py",
+								    "shareWithUserId": "rash",
+								    "filePermission": "write"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
@@ -398,13 +420,15 @@
 							   -d \
 							'{
 							  "commitId": "John Commit 12",
-							  "File_Unshare": {
-							    "userId": "john",
-							    "filesystemId": "john-filesystem-1",
-							    "filesystemVersion": 4,
-							    "filePath": "/",
-							    "fileName": "data_count.py",
-							    "unshareWithUserId": "rash"
+							  0: {
+							  	"File_Unshare": {
+								    "userId": "john",
+								    "filesystemId": "john-filesystem-1",
+								    "filesystemVersion": 4,
+								    "filePath": "/",
+								    "fileName": "data_count.py",
+								    "unshareWithUserId": "rash"
+								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'
