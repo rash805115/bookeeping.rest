@@ -17,21 +17,10 @@ import bookeeping.rest.response.Response;
 public class DirectoryDatabaseService
 {
 	private DirectoryService directoryService;
-	private static DirectoryDatabaseService directoryDatabaseService = null;
 	
-	private DirectoryDatabaseService()
+	public DirectoryDatabaseService()
 	{
 		this.directoryService = new DirectoryServiceImpl();
-	}
-	
-	public static DirectoryDatabaseService getInstance()
-	{
-		if(DirectoryDatabaseService.directoryDatabaseService == null)
-		{
-			DirectoryDatabaseService.directoryDatabaseService = new DirectoryDatabaseService();
-		}
-		
-		return DirectoryDatabaseService.directoryDatabaseService;
 	}
 	
 	public Response createNewDirectory(String commitId, String userId, String filesystemId, int filesystemVersion, String directoryPath, String directoryName, Map<String, Object> directoryProperties)

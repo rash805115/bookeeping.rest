@@ -64,7 +64,7 @@ public class User
 				}
 			}
 			
-			return UserDatabaseService.getInstance().createNewUser(userId, userProperties).getResponseString();
+			return new UserDatabaseService().createNewUser(userId, userProperties).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{
@@ -102,7 +102,7 @@ public class User
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String)\"");
 			}
 			
-			return UserDatabaseService.getInstance().getUser(userId).getResponseString();
+			return new UserDatabaseService().getUser(userId).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{

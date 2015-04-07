@@ -12,21 +12,10 @@ import bookeeping.rest.response.Response;
 public class UserDatabaseService
 {
 	private UserService userService;
-	private static UserDatabaseService userDatabaseService = null;
 	
-	private UserDatabaseService()
+	public UserDatabaseService()
 	{
 		this.userService = new UserServiceImpl();
-	}
-	
-	public static UserDatabaseService getInstance()
-	{
-		if(UserDatabaseService.userDatabaseService == null)
-		{
-			UserDatabaseService.userDatabaseService = new UserDatabaseService();
-		}
-		
-		return UserDatabaseService.userDatabaseService;
 	}
 	
 	public Response createNewUser(String userId, Map<String, Object> userProperties)

@@ -43,7 +43,7 @@ public class Node
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String)\"");
 			}
 			
-			return GenericDatabaseService.getInstance().getNode(nodeId).getResponseString();
+			return new GenericDatabaseService().getNode(nodeId).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{
@@ -79,7 +79,7 @@ public class Node
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String) | version(Integer)\"");
 			}
 			
-			return GenericDatabaseService.getInstance().getNodeVersion(nodeId, version).getResponseString();
+			return new GenericDatabaseService().getNodeVersion(nodeId, version).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{

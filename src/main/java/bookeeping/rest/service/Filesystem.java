@@ -45,7 +45,7 @@ public class Filesystem
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String)\"");
 			}
 			
-			return FilesystemDatabaseService.getInstance().getFilesystem(userId, filesystemId).getResponseString();
+			return new FilesystemDatabaseService().getFilesystem(userId, filesystemId).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{

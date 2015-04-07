@@ -15,21 +15,10 @@ import bookeeping.rest.response.Response;
 public class GenericDatabaseService
 {
 	private GenericService genericService;
-	private static GenericDatabaseService genericDatabaseService = null;
 	
-	private GenericDatabaseService()
+	public GenericDatabaseService()
 	{
 		this.genericService = new GenericServiceImpl();
-	}
-	
-	public static GenericDatabaseService getInstance()
-	{
-		if(GenericDatabaseService.genericDatabaseService == null)
-		{
-			GenericDatabaseService.genericDatabaseService = new GenericDatabaseService();
-		}
-		
-		return GenericDatabaseService.genericDatabaseService;
 	}
 	
 	public Response createNewVersion(String commitId, String nodeId, Map<String, Object> changeMetadata, Map<String, Object> changedProperties)

@@ -83,7 +83,7 @@ public class Commit
 							
 							Map<String, Object> changeMetadata = new HashMap<String, Object>();
 							Map<String, Object> changedProperties = new HashMap<String, Object>();
-							operationResult = GenericDatabaseService.getInstance().createNewVersion(commitId, nodeId, changeMetadata, changedProperties);
+							operationResult = new GenericDatabaseService().createNewVersion(commitId, nodeId, changeMetadata, changedProperties);
 							data.put(CommitProperty.node_version.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -104,7 +104,7 @@ public class Commit
 								throw new MandatoryPropertyNotFound("ERROR: Required property (Node_Delete) - \"nodeId(String)\"");
 							}
 							
-							operationResult = GenericDatabaseService.getInstance().deleteNodeTemporarily(commitId, nodeId);
+							operationResult = new GenericDatabaseService().deleteNodeTemporarily(commitId, nodeId);
 							data.put(CommitProperty.node_delete.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -127,7 +127,7 @@ public class Commit
 							}
 							
 							Map<String, Object> filesystemProperties = new HashMap<String, Object>();
-							operationResult = FilesystemDatabaseService.getInstance().createNewFilesystem(commitId, userId, filesystemId, filesystemProperties);
+							operationResult = new FilesystemDatabaseService().createNewFilesystem(commitId, userId, filesystemId, filesystemProperties);
 							data.put(CommitProperty.filesystem_create.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -150,7 +150,7 @@ public class Commit
 								throw new MandatoryPropertyNotFound("ERROR: Required property (Filesystem_Restore) - \"userId(String) | filesystemId(String) | nodeIdToBeRestored(String)\"");
 							}
 							
-							operationResult = FilesystemDatabaseService.getInstance().restoreFilesystem(commitId, userId, filesystemId, nodeIdToBeRestored);
+							operationResult = new FilesystemDatabaseService().restoreFilesystem(commitId, userId, filesystemId, nodeIdToBeRestored);
 							data.put(CommitProperty.filesystem_restore.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -177,7 +177,7 @@ public class Commit
 							}
 							
 							Map<String, Object> directoryProperties = new HashMap<String, Object>();
-							operationResult = DirectoryDatabaseService.getInstance().createNewDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, directoryProperties);
+							operationResult = new DirectoryDatabaseService().createNewDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, directoryProperties);
 							data.put(CommitProperty.directory_create.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -204,7 +204,7 @@ public class Commit
 								throw new MandatoryPropertyNotFound("ERROR: Required property (Directory_Restore) - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | directoryPath(String) | directoryName(String) | nodeIdToBeRestored(String)\"");
 							}
 							
-							operationResult = DirectoryDatabaseService.getInstance().restoreDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, nodeIdToBeRestored);
+							operationResult = new DirectoryDatabaseService().restoreDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, nodeIdToBeRestored);
 							data.put(CommitProperty.directory_restore.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -232,7 +232,7 @@ public class Commit
 								throw new MandatoryPropertyNotFound("ERROR: Required property (Directory_Move) - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | oldDirectoryPath(String) | oldDirectoryName(String) | newDirectoryPath(String) | newDirectoryName(String)\"");
 							}
 							
-							operationResult = DirectoryDatabaseService.getInstance().moveDirectory(commitId, userId, filesystemId, filesystemVersion, oldDirectoryPath, oldDirectoryName, newDirectoryPath, newDirectoryName);
+							operationResult = new DirectoryDatabaseService().moveDirectory(commitId, userId, filesystemId, filesystemVersion, oldDirectoryPath, oldDirectoryName, newDirectoryPath, newDirectoryName);
 							data.put(CommitProperty.directory_move.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -259,7 +259,7 @@ public class Commit
 							}
 							
 							Map<String, Object> fileProperties = new HashMap<String, Object>();
-							operationResult = FileDatabaseService.getInstance().createNewFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, fileProperties);
+							operationResult = new FileDatabaseService().createNewFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, fileProperties);
 							data.put(CommitProperty.file_create.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -286,7 +286,7 @@ public class Commit
 								throw new MandatoryPropertyNotFound("ERROR: Required property (File_Restore) - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | filePath(String) | fileName(String) | nodeIdToBeRestored(String)\"");
 							}
 							
-							operationResult = FileDatabaseService.getInstance().restoreFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, nodeIdToBeRestored);
+							operationResult = new FileDatabaseService().restoreFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, nodeIdToBeRestored);
 							data.put(CommitProperty.file_restore.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -314,7 +314,7 @@ public class Commit
 								throw new MandatoryPropertyNotFound("ERROR: Required property (File_Move) - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | oldFilePath(String) | oldFileName(String) | newFilePath(String) | newFileName(String)\"");
 							}
 							
-							operationResult = FileDatabaseService.getInstance().moveFile(commitId, userId, filesystemId, filesystemVersion, oldFilePath, oldFileName, newFilePath, newFileName);
+							operationResult = new FileDatabaseService().moveFile(commitId, userId, filesystemId, filesystemVersion, oldFilePath, oldFileName, newFilePath, newFileName);
 							data.put(CommitProperty.file_move.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -342,7 +342,7 @@ public class Commit
 								throw new MandatoryPropertyNotFound("ERROR: Required property (File_Share) - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | filePath(String) | fileName(String) | shareWithUserId(String) | filePermission(String)\"");
 							}
 							
-							operationResult = FileDatabaseService.getInstance().shareFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, shareWithUserId, filePermission);
+							operationResult = new FileDatabaseService().shareFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, shareWithUserId, filePermission);
 							data.put(CommitProperty.file_share.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}
@@ -369,7 +369,7 @@ public class Commit
 								throw new MandatoryPropertyNotFound("ERROR: Required property (File_Unshare) - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | filePath(String) | fileName(String) | unshareWithUserId(String)\"");
 							}
 							
-							operationResult = FileDatabaseService.getInstance().unshareFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, unshareWithUserId);
+							operationResult = new FileDatabaseService().unshareFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, unshareWithUserId);
 							data.put(CommitProperty.file_unshare.name(), operationResult.getResponseString());
 						}
 						catch(JSONException jsonException) {}

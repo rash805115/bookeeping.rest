@@ -50,7 +50,7 @@ public class File
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | filePath(String) | fileName(String)\"");
 			}
 			
-			return FileDatabaseService.getInstance().getFile(userId, filesystemId, filesystemVersion, filePath, fileName).getResponseString();
+			return new FileDatabaseService().getFile(userId, filesystemId, filesystemVersion, filePath, fileName).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{

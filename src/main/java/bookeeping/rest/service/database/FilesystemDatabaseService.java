@@ -15,21 +15,10 @@ import bookeeping.rest.response.Response;
 public class FilesystemDatabaseService
 {
 	private FilesystemService filesystemService;
-	private static FilesystemDatabaseService filesystemDatabaseService = null;
 	
-	private FilesystemDatabaseService()
+	public FilesystemDatabaseService()
 	{
 		this.filesystemService = new FilesystemServiceImpl();
-	}
-	
-	public static FilesystemDatabaseService getInstance()
-	{
-		if(FilesystemDatabaseService.filesystemDatabaseService == null)
-		{
-			FilesystemDatabaseService.filesystemDatabaseService = new FilesystemDatabaseService();
-		}
-		
-		return FilesystemDatabaseService.filesystemDatabaseService;
 	}
 	
 	public Response createNewFilesystem(String commitId, String userId, String filesystemId, Map<String, Object> filesystemProperties)

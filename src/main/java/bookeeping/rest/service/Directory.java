@@ -50,7 +50,7 @@ public class Directory
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | directoryPath(String) | directoryName(String)\"");
 			} 
 			
-			return DirectoryDatabaseService.getInstance().getDirectory(userId, filesystemId, filesystemVersion, directoryPath, directoryName).getResponseString();
+			return new DirectoryDatabaseService().getDirectory(userId, filesystemId, filesystemVersion, directoryPath, directoryName).getResponseString();
 		}
 		catch(JSONException jsonException)
 		{

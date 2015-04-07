@@ -20,21 +20,10 @@ import bookeeping.rest.response.Response;
 public class FileDatabaseService
 {
 	private FileService fileService;
-	private static FileDatabaseService fileDatabaseService = null;
 	
-	private FileDatabaseService()
+	public FileDatabaseService()
 	{
 		this.fileService = new FileServiceImpl();
-	}
-	
-	public static FileDatabaseService getInstance()
-	{
-		if(FileDatabaseService.fileDatabaseService == null)
-		{
-			FileDatabaseService.fileDatabaseService = new FileDatabaseService();
-		}
-		
-		return FileDatabaseService.fileDatabaseService;
 	}
 	
 	public Response createNewFile(String commitId, String userId, String filesystemId, int filesystemVersion, String filePath, String fileName, Map<String, Object> fileProperties)
