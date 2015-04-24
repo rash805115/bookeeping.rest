@@ -3,6 +3,7 @@ package bookeeping.rest.response;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -85,6 +86,20 @@ public class Response
 	}
 	
 	public String addData(JSONObject data)
+	{
+		try
+		{
+			this.response.put("data", data);
+			return this.getResponseString();
+		}
+		catch (JSONException jsonException)
+		{
+			jsonException.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String addData(JSONArray data)
 	{
 		try
 		{
