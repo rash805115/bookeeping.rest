@@ -435,6 +435,51 @@
 						</pre>
 					</td>
 				</tr>
+				
+				<tr>
+					<td>Xray - Node</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "nodeId": "4"
+							 }' \
+							 'http://localhost:8080/bookeeping.rest/api/xray/node'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Xray - Version</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "nodeId": "4"
+							 }' \
+							 'http://localhost:8080/bookeeping.rest/api/xray/version'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Xray - Deleted</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  "nodeId": "4"
+							 }' \
+							 'http://localhost:8080/bookeeping.rest/api/xray/deleted'
+						</pre>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</body>
