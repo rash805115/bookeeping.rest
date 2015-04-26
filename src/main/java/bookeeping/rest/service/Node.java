@@ -23,9 +23,9 @@ public class Node
 {
 	@POST
 	@Path("/info")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getNode(InputStream inputStream)
+	public javax.ws.rs.core.Response getNode(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -43,23 +43,25 @@ public class Node
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String)\"");
 			}
 			
-			return new GenericDatabaseService().getNode(nodeId).getResponseString();
+			return new GenericDatabaseService().getNode(nodeId).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 	
 	@POST
 	@Path("/version/info")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getNodeVersion(InputStream inputStream)
+	public javax.ws.rs.core.Response getNodeVersion(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -79,15 +81,17 @@ public class Node
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String) | version(Integer)\"");
 			}
 			
-			return new GenericDatabaseService().getNodeVersion(nodeId, version).getResponseString();
+			return new GenericDatabaseService().getNodeVersion(nodeId, version).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 }

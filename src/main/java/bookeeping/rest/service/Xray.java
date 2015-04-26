@@ -23,9 +23,9 @@ public class Xray
 {
 	@POST
 	@Path("/node")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getXrayNode(InputStream inputStream)
+	public javax.ws.rs.core.Response getXrayNode(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -43,23 +43,25 @@ public class Xray
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String)\"");
 			}
 			
-			return new XrayDatabaseService().xrayNode(nodeId).getResponseString();
+			return new XrayDatabaseService().xrayNode(nodeId).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 	
 	@POST
 	@Path("/version")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getXrayVersion(InputStream inputStream)
+	public javax.ws.rs.core.Response getXrayVersion(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -77,23 +79,25 @@ public class Xray
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String)\"");
 			}
 			
-			return new XrayDatabaseService().xrayVersion(nodeId).getResponseString();
+			return new XrayDatabaseService().xrayVersion(nodeId).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 	
 	@POST
 	@Path("/deleted")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getXrayDeleted(InputStream inputStream)
+	public javax.ws.rs.core.Response getXrayDeleted(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -111,15 +115,17 @@ public class Xray
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String)\"");
 			}
 			
-			return new XrayDatabaseService().xrayDeleted(nodeId).getResponseString();
+			return new XrayDatabaseService().xrayDeleted(nodeId).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 }

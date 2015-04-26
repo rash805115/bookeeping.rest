@@ -25,9 +25,9 @@ public class File
 {
 	@POST
 	@Path("/info")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getFile(InputStream inputStream)
+	public javax.ws.rs.core.Response getFile(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -50,15 +50,17 @@ public class File
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | filePath(String) | fileName(String)\"");
 			}
 			
-			return new FileDatabaseService().getFile(userId, filesystemId, filesystemVersion, filePath, fileName).getResponseString();
+			return new FileDatabaseService().getFile(userId, filesystemId, filesystemVersion, filePath, fileName).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 }

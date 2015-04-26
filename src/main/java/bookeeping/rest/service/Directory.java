@@ -25,9 +25,9 @@ public class Directory
 {
 	@POST
 	@Path("/info")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getDirectory(InputStream inputStream)
+	public javax.ws.rs.core.Response getDirectory(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -50,15 +50,17 @@ public class Directory
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String) | filesystemVersion(Integer) | directoryPath(String) | directoryName(String)\"");
 			} 
 			
-			return new DirectoryDatabaseService().getDirectory(userId, filesystemId, filesystemVersion, directoryPath, directoryName).getResponseString();
+			return new DirectoryDatabaseService().getDirectory(userId, filesystemId, filesystemVersion, directoryPath, directoryName).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 }

@@ -25,9 +25,9 @@ public class User
 {
 	@POST
 	@Path("/create")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String createNewUser(InputStream inputStream)
+	public javax.ws.rs.core.Response createNewUser(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -64,27 +64,30 @@ public class User
 				}
 			}
 			
-			return new UserDatabaseService().createNewUser(userId, userProperties).getResponseString();
+			return new UserDatabaseService().createNewUser(userId, userProperties).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch (MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 		catch(ClassCastException classCastException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", classCastException.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", classCastException.getMessage());
+			return response.getServerResponse();
 		}
 	}
 	
 	@POST
 	@Path("/info")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getUser(InputStream inputStream)
+	public javax.ws.rs.core.Response getUser(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -102,15 +105,17 @@ public class User
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String)\"");
 			}
 			
-			return new UserDatabaseService().getUser(userId).getResponseString();
+			return new UserDatabaseService().getUser(userId).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch (MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 }

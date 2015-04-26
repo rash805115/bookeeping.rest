@@ -11,11 +11,27 @@ public class Response
 {
 	private JSONObject response;
 	private HttpCodes httpCodes;
+	private javax.ws.rs.core.Response serverResponse;
 	
 	public Response()
 	{
 		this.response = new JSONObject();
 		this.httpCodes = HttpCodes.getInstance();
+	}
+	
+	public javax.ws.rs.core.Response getServerResponse()
+	{
+		try
+		{
+			int statusCode = (int) this.response.get("status_code");
+			this.serverResponse = javax.ws.rs.core.Response.status(statusCode).entity(this.getResponseString()).build();
+			return serverResponse;
+		}
+		catch (JSONException jsonException)
+		{
+			jsonException.printStackTrace();
+			return null;
+		}
 	}
 	
 	public String getResponseString()

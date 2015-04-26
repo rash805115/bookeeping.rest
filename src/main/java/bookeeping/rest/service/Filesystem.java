@@ -24,9 +24,9 @@ public class Filesystem
 {
 	@POST
 	@Path("/info")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String getFilesystem(InputStream inputStream)
+	public javax.ws.rs.core.Response getFilesystem(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -45,15 +45,17 @@ public class Filesystem
 				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String)\"");
 			}
 			
-			return new FilesystemDatabaseService().getFilesystem(userId, filesystemId).getResponseString();
+			return new FilesystemDatabaseService().getFilesystem(userId, filesystemId).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 }

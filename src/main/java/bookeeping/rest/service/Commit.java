@@ -38,9 +38,9 @@ public class Commit
 {
 	@POST
 	@Path("/commit")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String commit(InputStream inputStream)
+	public javax.ws.rs.core.Response commit(InputStream inputStream)
 	{
 		Response response = new Response();
 		try
@@ -401,7 +401,7 @@ public class Commit
 				}
 				
 				int statusCode = (int) operationResult.getResponseObject().get("status_code");
-				if(statusCode >= 300)
+				if(statusCode >= 400)
 				{
 					success = false;
 					break;
@@ -411,20 +411,24 @@ public class Commit
 			response.addData(data);
 			if(success)
 			{
-				return response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: commit successful - \"" + commitId + "\"");
+				response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: commit successful - \"" + commitId + "\"");
+				return response.getServerResponse();
 			}
 			else
 			{
-				return response.addStatusAndOperation(HttpCodes.NOTFOUND, "success", "ERROR: commit failed - \"" + commitId + "\"");
+				response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", "ERROR: commit failed - \"" + commitId + "\"");
+				return response.getServerResponse();
 			}
 		}
 		catch(JSONException jsonException)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
 		}
 		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
 		{
-			return response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
 		}
 	}
 }
