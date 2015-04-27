@@ -35,17 +35,19 @@ public class Filesystem
 			JSONObject requestJson = request.getRequestObject();
 			
 			String userId = null, filesystemId = null;
+			int filesystemVersion = -1;
 			try
 			{
 				userId = (String) requestJson.get(UserProperty.userid.name());
 				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
+				filesystemVersion = (int) requestJson.getInt(FilesystemProperty.filesystemversion.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{
-				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String)\"");
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"userId(String) | filesystemId(String) | filesystemVersion(int)\"");
 			}
 			
-			return new FilesystemDatabaseService().getFilesystem(userId, filesystemId).getServerResponse();
+			return new FilesystemDatabaseService().getFilesystem(userId, filesystemId, filesystemVersion).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{
