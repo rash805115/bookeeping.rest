@@ -114,7 +114,7 @@ public class Commit
 							Map<String, Object> changeMetadata = new HashMap<String, Object>();
 							Map<String, Object> changedProperties = new HashMap<String, Object>();
 							operationResult = new GenericDatabaseService().createNewVersion(commitId, nodeId, changeMetadata, changedProperties);
-							data.put(CommitProperty.node_version.name(), operationResult.getResponseString());
+							data.put(CommitProperty.node_version.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -134,7 +134,7 @@ public class Commit
 							}
 							
 							operationResult = new GenericDatabaseService().deleteNodeTemporarily(commitId, nodeId);
-							data.put(CommitProperty.node_delete.name(), operationResult.getResponseString());
+							data.put(CommitProperty.node_delete.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -156,7 +156,7 @@ public class Commit
 							
 							Map<String, Object> filesystemProperties = new HashMap<String, Object>();
 							operationResult = new FilesystemDatabaseService().createNewFilesystem(commitId, userId, filesystemId, filesystemProperties);
-							data.put(CommitProperty.filesystem_create.name(), operationResult.getResponseString());
+							data.put(CommitProperty.filesystem_create.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -178,7 +178,7 @@ public class Commit
 							}
 							
 							operationResult = new FilesystemDatabaseService().restoreFilesystem(commitId, userId, filesystemId, nodeIdToBeRestored);
-							data.put(CommitProperty.filesystem_restore.name(), operationResult.getResponseString());
+							data.put(CommitProperty.filesystem_restore.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -204,7 +204,7 @@ public class Commit
 							
 							Map<String, Object> directoryProperties = new HashMap<String, Object>();
 							operationResult = new DirectoryDatabaseService().createNewDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, directoryProperties);
-							data.put(CommitProperty.directory_create.name(), operationResult.getResponseString());
+							data.put(CommitProperty.directory_create.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -230,7 +230,7 @@ public class Commit
 							}
 							
 							operationResult = new DirectoryDatabaseService().restoreDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, nodeIdToBeRestored);
-							data.put(CommitProperty.directory_restore.name(), operationResult.getResponseString());
+							data.put(CommitProperty.directory_restore.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -257,7 +257,7 @@ public class Commit
 							}
 							
 							operationResult = new DirectoryDatabaseService().moveDirectory(commitId, userId, filesystemId, filesystemVersion, oldDirectoryPath, oldDirectoryName, newDirectoryPath, newDirectoryName);
-							data.put(CommitProperty.directory_move.name(), operationResult.getResponseString());
+							data.put(CommitProperty.directory_move.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -283,7 +283,7 @@ public class Commit
 							
 							Map<String, Object> fileProperties = new HashMap<String, Object>();
 							operationResult = new FileDatabaseService().createNewFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, fileProperties);
-							data.put(CommitProperty.file_create.name(), operationResult.getResponseString());
+							data.put(CommitProperty.file_create.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -309,7 +309,7 @@ public class Commit
 							}
 							
 							operationResult = new FileDatabaseService().restoreFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, nodeIdToBeRestored);
-							data.put(CommitProperty.file_restore.name(), operationResult.getResponseString());
+							data.put(CommitProperty.file_restore.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -336,7 +336,7 @@ public class Commit
 							}
 							
 							operationResult = new FileDatabaseService().moveFile(commitId, userId, filesystemId, filesystemVersion, oldFilePath, oldFileName, newFilePath, newFileName);
-							data.put(CommitProperty.file_move.name(), operationResult.getResponseString());
+							data.put(CommitProperty.file_move.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -363,7 +363,7 @@ public class Commit
 							}
 							
 							operationResult = new FileDatabaseService().shareFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, shareWithUserId, filePermission);
-							data.put(CommitProperty.file_share.name(), operationResult.getResponseString());
+							data.put(CommitProperty.file_share.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
@@ -389,7 +389,7 @@ public class Commit
 							}
 							
 							operationResult = new FileDatabaseService().unshareFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, unshareWithUserId);
-							data.put(CommitProperty.file_unshare.name(), operationResult.getResponseString());
+							data.put(CommitProperty.file_unshare.name(), operationResult);
 						}
 						catch(JSONException jsonException) {}
 						break;
