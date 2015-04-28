@@ -9,7 +9,6 @@ import bookeeping.backend.exception.FilesystemNotFound;
 import bookeeping.backend.exception.NodeNotFound;
 import bookeeping.backend.exception.NodeUnavailable;
 import bookeeping.backend.exception.UserNotFound;
-import bookeeping.backend.exception.VersionNotFound;
 import bookeeping.rest.response.HttpCodes;
 import bookeeping.rest.response.Response;
 
@@ -64,19 +63,17 @@ public class FilesystemDatabaseService
 		}
 	}
 	
-	public Response getFilesystem(String userId, String filesystemId, int filesystemVersion)
+	public Response getFilesystem(String userId, String filesystemId)
 	{
 		Response response = new Response();
 		try
 		{
 			Map<String, Object> retrievedProperties = this.filesystemService.getFilesystem(userId, filesystemId);
-			String rootNodeId = this.filesystemService.getRootDirectory(userId, filesystemId, filesystemVersion);
-			retrievedProperties.put("rootNodeId", rootNodeId);
 			response.addData(retrievedProperties);
 			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: record found for filesystem - \"" + filesystemId + "\"");
 			return response;
 		}
-		catch (UserNotFound | FilesystemNotFound | VersionNotFound exception)
+		catch (UserNotFound | FilesystemNotFound exception)
 		{
 			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", exception.getMessage());
 			return response;
