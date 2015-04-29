@@ -104,7 +104,8 @@ public class Commit
 							String nodeId = null;
 							try
 							{
-								nodeId = (String) commandJson.get(GenericProperty.nodeid.name());
+								nodeId = (String) commandJson.remove(GenericProperty.nodeid.name());
+								if(nodeId == null) throw new JSONException("");
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -113,6 +114,37 @@ public class Commit
 							
 							Map<String, Object> changeMetadata = new HashMap<String, Object>();
 							Map<String, Object> changedProperties = new HashMap<String, Object>();
+							@SuppressWarnings("unchecked") Iterator<Object> keyset = commandJson.keys();
+							while(keyset.hasNext())
+							{
+								try
+								{
+									String propertyKey = (String) keyset.next();
+									if(propertyKey.equalsIgnoreCase(CommitProperty.change_metadata.name()))
+									{
+										JSONObject changeMetadataProperties = commandJson.getJSONObject(propertyKey);
+										@SuppressWarnings("unchecked") Iterator<Object> changeMetadataKeyset = changeMetadataProperties.keys();
+										while(changeMetadataKeyset.hasNext())
+										{
+											String metadataKey = (String) changeMetadataKeyset.next();
+											changeMetadata.put(metadataKey, changeMetadataProperties.get(metadataKey));
+										}
+									}
+									else
+									{
+										changedProperties.put(propertyKey, commandJson.get(propertyKey));
+									}
+								}
+								catch(JSONException jsonException)
+								{
+									throw new ClassCastException("ERROR: Metadata properties must be inside a JSON structure.");
+								}
+								catch(ClassCastException e)
+								{
+									throw new ClassCastException("ERROR: Optional property keys must be string.");
+								}
+							}
+							
 							operationResult = new GenericDatabaseService().createNewVersion(commitId, nodeId, changeMetadata, changedProperties);
 							data.put(CommitProperty.node_version.name(), operationResult);
 						}
@@ -146,8 +178,9 @@ public class Commit
 							String userId = null, filesystemId = null;
 							try
 							{
-								userId = (String) commandJson.get(UserProperty.userid.name());
-								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
+								userId = (String) commandJson.remove(UserProperty.userid.name());
+								filesystemId = (String) commandJson.remove(FilesystemProperty.filesystemid.name());
+								if(userId == null || filesystemId == null) throw new JSONException("");
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -155,6 +188,21 @@ public class Commit
 							}
 							
 							Map<String, Object> filesystemProperties = new HashMap<String, Object>();
+							@SuppressWarnings("unchecked") Iterator<Object> keyset = commandJson.keys();
+							while(keyset.hasNext())
+							{
+								try
+								{
+									String propertyKey = (String) keyset.next();
+									filesystemProperties.put(propertyKey, commandJson.get(propertyKey));
+								}
+								catch(JSONException jsonException) {}
+								catch(ClassCastException e)
+								{
+									throw new ClassCastException("ERROR: Optional property keys must be string.");
+								}
+							}
+							
 							operationResult = new FilesystemDatabaseService().createNewFilesystem(commitId, userId, filesystemId, filesystemProperties);
 							data.put(CommitProperty.filesystem_create.name(), operationResult);
 						}
@@ -188,14 +236,15 @@ public class Commit
 						try
 						{
 							String userId = null, filesystemId = null, directoryPath = null, directoryName = null;
-							int filesystemVersion = -1;
+							Integer filesystemVersion = -1;
 							try
 							{
-								userId = (String) commandJson.get(UserProperty.userid.name());
-								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
-								directoryPath = (String) commandJson.get(DirectoryProperty.directorypath.name());
-								directoryName = (String) commandJson.get(DirectoryProperty.directoryname.name());
+								userId = (String) commandJson.remove(UserProperty.userid.name());
+								filesystemId = (String) commandJson.remove(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (Integer) commandJson.remove(FilesystemProperty.filesystemversion.name());
+								directoryPath = (String) commandJson.remove(DirectoryProperty.directorypath.name());
+								directoryName = (String) commandJson.remove(DirectoryProperty.directoryname.name());
+								if(userId == null || filesystemId == null || filesystemVersion == null || directoryPath == null || directoryName == null) throw new JSONException("");
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -203,6 +252,21 @@ public class Commit
 							}
 							
 							Map<String, Object> directoryProperties = new HashMap<String, Object>();
+							@SuppressWarnings("unchecked") Iterator<Object> keyset = commandJson.keys();
+							while(keyset.hasNext())
+							{
+								try
+								{
+									String propertyKey = (String) keyset.next();
+									directoryProperties.put(propertyKey, commandJson.get(propertyKey));
+								}
+								catch(JSONException jsonException) {}
+								catch(ClassCastException e)
+								{
+									throw new ClassCastException("ERROR: Optional property keys must be string.");
+								}
+							}
+							
 							operationResult = new DirectoryDatabaseService().createNewDirectory(commitId, userId, filesystemId, filesystemVersion, directoryPath, directoryName, directoryProperties);
 							data.put(CommitProperty.directory_create.name(), operationResult);
 						}
@@ -267,14 +331,15 @@ public class Commit
 						try
 						{
 							String userId = null, filesystemId = null, filePath = null, fileName = null;
-							int filesystemVersion = -1;
+							Integer filesystemVersion = -1;
 							try
 							{
-								userId = (String) commandJson.get(UserProperty.userid.name());
-								filesystemId = (String) commandJson.get(FilesystemProperty.filesystemid.name());
-								filesystemVersion = (int) commandJson.get(FilesystemProperty.filesystemversion.name());
-								filePath = (String) commandJson.get(FileProperty.filepath.name());
-								fileName = (String) commandJson.get(FileProperty.filename.name());
+								userId = (String) commandJson.remove(UserProperty.userid.name());
+								filesystemId = (String) commandJson.remove(FilesystemProperty.filesystemid.name());
+								filesystemVersion = (Integer) commandJson.remove(FilesystemProperty.filesystemversion.name());
+								filePath = (String) commandJson.remove(FileProperty.filepath.name());
+								fileName = (String) commandJson.remove(FileProperty.filename.name());
+								if(userId == null || filesystemId == null || filesystemVersion == null || filePath == null || fileName == null) throw new JSONException("");
 							}
 							catch(JSONException | ClassCastException e)
 							{
@@ -282,6 +347,20 @@ public class Commit
 							}
 							
 							Map<String, Object> fileProperties = new HashMap<String, Object>();
+							@SuppressWarnings("unchecked") Iterator<Object> keyset = commandJson.keys();
+							while(keyset.hasNext())
+							{
+								try
+								{
+									String propertyKey = (String) keyset.next();
+									fileProperties.put(propertyKey, commandJson.get(propertyKey));
+								}
+								catch(JSONException jsonException) {}
+								catch(ClassCastException e)
+								{
+									throw new ClassCastException("ERROR: Optional property keys must be string.");
+								}
+							}
 							operationResult = new FileDatabaseService().createNewFile(commitId, userId, filesystemId, filesystemVersion, filePath, fileName, fileProperties);
 							data.put(CommitProperty.file_create.name(), operationResult);
 						}

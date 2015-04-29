@@ -2,6 +2,7 @@ package bookeeping.rest.service;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -38,7 +39,8 @@ public class User
 			String userId = null;
 			try
 			{
-				userId = (String) requestJson.get(UserProperty.userid.name());
+				userId = (String) requestJson.remove(UserProperty.userid.name());
+				if(userId == null) throw new JSONException("");
 			}
 			catch(JSONException | ClassCastException e)
 			{
@@ -46,21 +48,18 @@ public class User
 			}
 			
 			Map<String, Object> userProperties = new HashMap<String, Object>();
-			String[] optionalProperties = {
-				UserProperty.firstname.name(), UserProperty.lastname.name(), UserProperty.primaryemail.name(),
-				UserProperty.secondaryemail.name(), UserProperty.phone.name()
-			};
-			for(String key : optionalProperties)
+			@SuppressWarnings("unchecked") Iterator<Object> keyset = requestJson.keys();
+			while(keyset.hasNext())
 			{
 				try
 				{
-					String value = (String) requestJson.get(key);
-					userProperties.put(key, value);
+					String key = (String) keyset.next();
+					userProperties.put(key, requestJson.get(key));
 				}
 				catch(JSONException jsonException) {}
 				catch(ClassCastException e)
 				{
-					throw new ClassCastException("ERROR: Optional property must be string.");
+					throw new ClassCastException("ERROR: Optional property keys must be string.");
 				}
 			}
 			
