@@ -68,6 +68,22 @@
 				</tr>
 				
 				<tr>
+					<td>Filesystem Create</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+								"userId": "john",
+								"filesystemId": "john-filesystem-1"
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/commit'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
 					<td>Filesystem Info</td>
 					<td>
 						<pre>
@@ -185,27 +201,6 @@
 							  	"Node_Delete": {
 							    		"nodeId": "d"
 							  	}
-							  }
-							}' \
-							 'http://localhost:8080/bookeeping.rest/api/commit'
-						</pre>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>Commit - Filesystem Create</td>
-					<td>
-						<pre>
-							curl -i -X POST \
-							   -H "Content-Type:application/json" \
-							   -d \
-							'{
-							  "commitId": "John Commit 1",
-							  0: {
-							  	"Filesystem_Create": {
-								    "userId": "john",
-								    "filesystemId": "john-filesystem-1"
-								}
 							  }
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/commit'

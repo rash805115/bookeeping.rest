@@ -171,44 +171,6 @@ public class Commit
 						catch(JSONException jsonException) {}
 						break;
 					}
-					case filesystem_create:
-					{
-						try
-						{
-							String userId = null, filesystemId = null;
-							try
-							{
-								userId = (String) commandJson.remove(UserProperty.userid.name());
-								filesystemId = (String) commandJson.remove(FilesystemProperty.filesystemid.name());
-								if(userId == null || filesystemId == null) throw new JSONException("");
-							}
-							catch(JSONException | ClassCastException e)
-							{
-								throw new MandatoryPropertyNotFound("ERROR: Required property (Filesystem_Create) - \"userId(String) | filesystemId(String)\"");
-							}
-							
-							Map<String, Object> filesystemProperties = new HashMap<String, Object>();
-							@SuppressWarnings("unchecked") Iterator<Object> keyset = commandJson.keys();
-							while(keyset.hasNext())
-							{
-								try
-								{
-									String propertyKey = (String) keyset.next();
-									filesystemProperties.put(propertyKey, commandJson.get(propertyKey));
-								}
-								catch(JSONException jsonException) {}
-								catch(ClassCastException e)
-								{
-									throw new ClassCastException("ERROR: Optional property keys must be string.");
-								}
-							}
-							
-							operationResult = new FilesystemDatabaseService().createNewFilesystem(commitId, userId, filesystemId, filesystemProperties);
-							data.put(CommitProperty.filesystem_create.name(), operationResult);
-						}
-						catch(JSONException jsonException) {}
-						break;
-					}
 					case filesystem_restore:
 					{
 						try

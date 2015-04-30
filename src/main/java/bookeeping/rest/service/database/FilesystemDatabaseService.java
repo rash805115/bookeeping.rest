@@ -21,12 +21,12 @@ public class FilesystemDatabaseService
 		this.filesystemService = new FilesystemServiceImpl();
 	}
 	
-	public Response createNewFilesystem(String commitId, String userId, String filesystemId, Map<String, Object> filesystemProperties)
+	public Response createNewFilesystem(String userId, String filesystemId, Map<String, Object> filesystemProperties)
 	{
 		Response response = new Response();
 		try
 		{
-			this.filesystemService.createNewFilesystem(commitId, userId, filesystemId, filesystemProperties);
+			this.filesystemService.createNewFilesystem(userId, filesystemId, filesystemProperties);
 			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: filesystem created - \"" + filesystemId + "\"");
 			return response;
 		}
