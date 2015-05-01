@@ -58,6 +58,42 @@ public class Xray
 	}
 	
 	@POST
+	@Path("/node/full")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public javax.ws.rs.core.Response getFullXray(InputStream inputStream)
+	{
+		Response response = new Response();
+		try
+		{
+			Request request = new Request(inputStream);
+			JSONObject requestJson = request.getRequestObject();
+			
+			String nodeId = null;
+			try
+			{
+				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+			}
+			catch(JSONException | ClassCastException e)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String)\"");
+			}
+			
+			return new XrayDatabaseService().xrayNodeFull(nodeId).getServerResponse();
+		}
+		catch(JSONException jsonException)
+		{
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
+		}
+		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
+		{
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
+		}
+	}
+	
+	@POST
 	@Path("/version")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
