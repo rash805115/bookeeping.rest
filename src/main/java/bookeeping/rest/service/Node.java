@@ -1,6 +1,9 @@
 package bookeeping.rest.service;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -82,6 +85,59 @@ public class Node
 			}
 			
 			return new GenericDatabaseService().getNodeVersion(nodeId, version).getServerResponse();
+		}
+		catch(JSONException jsonException)
+		{
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", "ERROR: Malformed Json");
+			return response.getServerResponse();
+		}
+		catch(MandatoryPropertyNotFound mandatoryPropertyNotFound)
+		{
+			response.addStatusAndOperation(HttpCodes.BADREQUEST, "failure", mandatoryPropertyNotFound.getMessage());
+			return response.getServerResponse();
+		}
+	}
+	
+	@POST
+	@Path("/modify")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public javax.ws.rs.core.Response changeNodeProperty(InputStream inputStream)
+	{
+		Response response = new Response();
+		try
+		{
+			Request request = new Request(inputStream);
+			JSONObject requestJson = request.getRequestObject();
+			
+			String nodeId = null;
+			try
+			{
+				nodeId = (String) requestJson.remove(GenericProperty.nodeid.name());
+				if(nodeId == null) throw new JSONException("");
+			}
+			catch(JSONException | ClassCastException e)
+			{
+				throw new MandatoryPropertyNotFound("ERROR: Required property - \"nodeId(String)\"");
+			}
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			@SuppressWarnings("unchecked") Iterator<Object> keyset = requestJson.keys();
+			while(keyset.hasNext())
+			{
+				try
+				{
+					String key = (String) keyset.next();
+					properties.put(key, requestJson.get(key));
+				}
+				catch(JSONException jsonException) {}
+				catch(ClassCastException e)
+				{
+					throw new ClassCastException("ERROR: Property keys must be string.");
+				}
+			}
+			
+			return new GenericDatabaseService().changeNodeProperties(nodeId, properties).getServerResponse();
 		}
 		catch(JSONException jsonException)
 		{

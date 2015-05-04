@@ -89,4 +89,20 @@ public class GenericDatabaseService
 			return response;
 		}
 	}
+	
+	public Response changeNodeProperties(String nodeId, Map<String, Object> properties)
+	{
+		Response response = new Response();
+		try
+		{
+			this.genericService.changeNodeProperties(nodeId, properties);
+			response.addStatusAndOperation(HttpCodes.OK, "success", "INFO: node property modified - \"" + nodeId + "\"");
+			return response;
+		}
+		catch (NodeNotFound e)
+		{
+			response.addStatusAndOperation(HttpCodes.NOTFOUND, "failure", e.getMessage());
+			return response;
+		}
+	}
 }
