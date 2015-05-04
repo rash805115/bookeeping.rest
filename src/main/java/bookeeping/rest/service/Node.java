@@ -39,7 +39,7 @@ public class Node
 			String nodeId = null;
 			try
 			{
-				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+				nodeId = (String) requestJson.get(GenericProperty.nodeId.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{
@@ -76,7 +76,7 @@ public class Node
 			int version = -1;
 			try
 			{
-				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+				nodeId = (String) requestJson.get(GenericProperty.nodeId.name());
 				version = (int) requestJson.get(GenericProperty.version.name());
 			}
 			catch(JSONException | ClassCastException e)
@@ -113,7 +113,7 @@ public class Node
 			String nodeId = null;
 			try
 			{
-				nodeId = (String) requestJson.remove(GenericProperty.nodeid.name());
+				nodeId = (String) requestJson.remove(GenericProperty.nodeId.name());
 				if(nodeId == null) throw new JSONException("");
 			}
 			catch(JSONException | ClassCastException e)
@@ -133,7 +133,7 @@ public class Node
 				catch(JSONException jsonException) {}
 				catch(ClassCastException e)
 				{
-					throw new ClassCastException("ERROR: Property keys must be string.");
+					throw new ClassCastException("ERROR: Optional property keys must be string.");
 				}
 			}
 			

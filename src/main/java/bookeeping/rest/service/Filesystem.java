@@ -40,8 +40,8 @@ public class Filesystem
 			String userId = null, filesystemId = null;
 			try
 			{
-				userId = (String) requestJson.remove(UserProperty.userid.name());
-				filesystemId = (String) requestJson.remove(FilesystemProperty.filesystemid.name());
+				userId = (String) requestJson.remove(UserProperty.userId.name());
+				filesystemId = (String) requestJson.remove(FilesystemProperty.filesystemId.name());
 				if(userId == null || filesystemId == null) throw new JSONException("");
 			}
 			catch(JSONException | ClassCastException e)
@@ -99,8 +99,8 @@ public class Filesystem
 			String userId = null, filesystemId = null;
 			try
 			{
-				userId = (String) requestJson.get(UserProperty.userid.name());
-				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
+				userId = (String) requestJson.get(UserProperty.userId.name());
+				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemId.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{

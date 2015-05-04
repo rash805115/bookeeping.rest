@@ -28,7 +28,7 @@ public class GenericDatabaseService
 		{
 			String versionNodeId = this.genericService.createNewVersion(commitId, nodeId, changeMetadata, changedProperties);
 			Map<String, Object> responseProperty = new HashMap<String, Object>();
-			responseProperty.put(GenericProperty.nodeid.name(), versionNodeId);
+			responseProperty.put(GenericProperty.nodeId.name(), versionNodeId);
 			response.addData(responseProperty);
 			response.addStatusAndOperation(HttpCodes.CREATED, "success", "INFO: node versioned - \"" + nodeId + "\"");
 			return response;

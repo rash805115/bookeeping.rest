@@ -2,5 +2,5 @@ package bookeeping.rest.request.expect;
 
 public enum CommitProperty
 {
-	commitid, change_metadata, node_version, node_delete, filesystem_create, filesystem_restore, directory_create, directory_restore, directory_move, file_create, file_restore, file_move, file_share, file_unshare
+	commitId, CHANGE_METADATA, NODE_VERSION, NODE_DELETE, FILESYSTEM_CREATE, FILESYSTEM_RESTORE, DIRECTORY_CREATE, DIRECTORY_RESTORE, DIRECTORY_MOVE, FILE_CREATE, FILE_RESTORE, FILE_MOVE, FILE_SHARE, FILE_UNSHARE
 }

@@ -32,32 +32,7 @@ public class Request
 			ioException.printStackTrace();
 		}
 		
-		JSONObject userJsonObject = new JSONObject(stringBuilder.toString());
-		this.request = this.recursiveJsonKeyConverterToLower(userJsonObject);
-	}
-	
-	private JSONObject recursiveJsonKeyConverterToLower(JSONObject jsonObject) throws JSONException
-	{
-		JSONObject resultJsonObject = new JSONObject();
-		@SuppressWarnings("unchecked") Iterator<String> keys = jsonObject.keys();
-		while(keys.hasNext())
-		{
-			String key = keys.next();
-			Object value = null;
-			try
-			{
-				JSONObject nestedJsonObject = jsonObject.getJSONObject(key);
-				value = this.recursiveJsonKeyConverterToLower(nestedJsonObject);
-			}
-			catch(JSONException jsonException)
-			{
-				value = jsonObject.get(key);
-			}
-			
-			resultJsonObject.put(key.toLowerCase(), value);
-		}
-		
-		return resultJsonObject;
+		this.request = new JSONObject(stringBuilder.toString());
 	}
 	
 	public String getRequestString()

@@ -108,10 +108,10 @@
 							   -d \
 							'{
 								"userId": "rash",
-							    "filesystemId": "rash-filesystem-1",
-							    "filesystemVersion": 0,
-							    "directoryPath": "/Music",
-							    "directoryName": "Inspirational"
+							    	"filesystemId": "rash-filesystem-1",
+							    	"filesystemVersion": 0,
+							    	"directoryPath": "/Music",
+							    	"directoryName": "Inspirational"
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/directory/info'
 						</pre>
@@ -127,10 +127,10 @@
 							   -d \
 							'{
 								"userId": "rash",
-							    "filesystemId": "rash-filesystem-1",
-							    "filesystemVersion": 0,
-							    "filePath": "/Music/Inspirational",
-							    "fileName": "bourne-theme.mp3"
+							    	"filesystemId": "rash-filesystem-1",
+							    	"filesystemVersion": 0,
+							    	"filePath": "/Music/Inspirational",
+							    	"fileName": "bourne-theme.mp3"
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/file/info'
 						</pre>
@@ -145,7 +145,7 @@
 							   -H "Content-Type:application/json" \
 							   -d \
 							'{
-							  "nodeId": "4"
+							  	"nodeId": "4"
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/node/info'
 						</pre>
@@ -160,10 +160,27 @@
 							   -H "Content-Type:application/json" \
 							   -d \
 							'{
-							  "nodeId": "4",
-							  "version": 0
+							  	"nodeId": "4",
+							  	"version": 0
 							}' \
 							 'http://localhost:8080/bookeeping.rest/api/node/version/info'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Node Property Modify</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  	"nodeId": "3",
+							  	"oldProperty": "newValue",
+							  	"newProperty": "newValue"
+							}' \
+							 'http://localhost:8080/bookeeping.rest/api/node/modify'
 						</pre>
 					</td>
 				</tr>
@@ -178,7 +195,7 @@
 							'{
 							  "commitId": "John Commit 2",
 							  0: {
-							  	"Node_Version": {
+							  	"NODE_VERSION": {
 								    "nodeId": "n"
 								}
 							  }
@@ -198,7 +215,7 @@
 							'{
 							  "commitId": "John Commit 7",
 							  0: {
-							  	"Node_Delete": {
+							  	"NODE_DELETE": {
 							    		"nodeId": "d"
 							  	}
 							  }
@@ -218,7 +235,7 @@
 							'{
 							  "commitId": "John Commit 10",
 							  0: {
-							  	"Filesystem_Restore": {
+							  	"FILESYSTEM_RESTORE": {
 								    "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "nodeIdToBeRestored": "d"
@@ -240,7 +257,7 @@
 							'{
 							  "commitId": "John Commit 11",
 							  0: {
-							  	"Directory_Create": {
+							  	"DIRECTORY_CREATE": {
 								    "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "filesystemVersion": 4,
@@ -264,7 +281,7 @@
 							'{
 							  "commitId": "John Commit 11",
 							  0: {
-							  	"Directory_Restore": {
+							  	"DIRECTORY_RESTORE": {
 								   "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "filesystemVersion": 4,
@@ -289,7 +306,7 @@
 							'{
 							  "commitId": "John Commit 11",
 							  0: {
-							  	"Directory_Move": {
+							  	"DIRECTORY_MOVE": {
 								   "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "filesystemVersion": 4,
@@ -315,7 +332,7 @@
 							'{
 							  "commitId": "John Commit 11",
 							  0: {
-							  	"File_Create": {
+							  	"FILE_CREATE": {
 								   "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "filesystemVersion": 4,
@@ -339,7 +356,7 @@
 							'{
 							  "commitId": "John Commit 11",
 							  0: {
-							  	"File_Restore": {
+							  	"FILE_RESTORE": {
 								    "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "filesystemVersion": 4,
@@ -364,7 +381,7 @@
 							'{
 							  "commitId": "John Commit 11",
 							  0: {
-							  	"File_Move": {
+							  	"FILE_MOVE": {
 								    "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "filesystemVersion": 4,
@@ -390,7 +407,7 @@
 							'{
 							  "commitId": "John Commit 12",
 							  0: {
-							  	"File_Share": {
+							  	"FILE_SHARE": {
 								    "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "filesystemVersion": 4,
@@ -416,7 +433,7 @@
 							'{
 							  "commitId": "John Commit 12",
 							  0: {
-							  	"File_Unshare": {
+							  	"FILE_UNSHARE": {
 								    "userId": "john",
 								    "filesystemId": "john-filesystem-1",
 								    "filesystemVersion": 4,
@@ -439,9 +456,24 @@
 							   -H "Content-Type:application/json" \
 							   -d \
 							'{
-							  "nodeId": "4"
+							  	"nodeId": "4"
 							 }' \
 							 'http://localhost:8080/bookeeping.rest/api/xray/node'
+						</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Xray - Node Full</td>
+					<td>
+						<pre>
+							curl -i -X POST \
+							   -H "Content-Type:application/json" \
+							   -d \
+							'{
+							  	"nodeId": "4"
+							 }' \
+							 'http://localhost:8080/bookeeping.rest/api/xray/node/full'
 						</pre>
 					</td>
 				</tr>
@@ -454,7 +486,7 @@
 							   -H "Content-Type:application/json" \
 							   -d \
 							'{
-							  "nodeId": "4"
+							  	"nodeId": "4"
 							 }' \
 							 'http://localhost:8080/bookeeping.rest/api/xray/version'
 						</pre>
@@ -469,7 +501,7 @@
 							   -H "Content-Type:application/json" \
 							   -d \
 							'{
-							  "nodeId": "4"
+							  	"nodeId": "4"
 							 }' \
 							 'http://localhost:8080/bookeeping.rest/api/xray/deleted'
 						</pre>

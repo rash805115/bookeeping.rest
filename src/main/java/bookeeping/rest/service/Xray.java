@@ -36,7 +36,7 @@ public class Xray
 			String nodeId = null;
 			try
 			{
-				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+				nodeId = (String) requestJson.get(GenericProperty.nodeId.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{
@@ -72,7 +72,7 @@ public class Xray
 			String nodeId = null;
 			try
 			{
-				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+				nodeId = (String) requestJson.get(GenericProperty.nodeId.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{
@@ -108,7 +108,7 @@ public class Xray
 			String nodeId = null;
 			try
 			{
-				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+				nodeId = (String) requestJson.get(GenericProperty.nodeId.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{
@@ -144,7 +144,7 @@ public class Xray
 			String nodeId = null;
 			try
 			{
-				nodeId = (String) requestJson.get(GenericProperty.nodeid.name());
+				nodeId = (String) requestJson.get(GenericProperty.nodeId.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{

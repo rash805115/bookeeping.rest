@@ -39,11 +39,11 @@ public class Directory
 			int filesystemVersion = -1;
 			try
 			{
-				userId = (String) requestJson.get(UserProperty.userid.name());
-				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
-				filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemversion.name());
-				directoryPath = (String) requestJson.get(DirectoryProperty.directorypath.name());
-				directoryName = (String) requestJson.get(DirectoryProperty.directoryname.name());
+				userId = (String) requestJson.get(UserProperty.userId.name());
+				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemId.name());
+				filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemVersion.name());
+				directoryPath = (String) requestJson.get(DirectoryProperty.directoryPath.name());
+				directoryName = (String) requestJson.get(DirectoryProperty.directoryName.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{

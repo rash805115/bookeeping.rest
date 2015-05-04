@@ -39,7 +39,7 @@ public class User
 			String userId = null;
 			try
 			{
-				userId = (String) requestJson.remove(UserProperty.userid.name());
+				userId = (String) requestJson.remove(UserProperty.userId.name());
 				if(userId == null) throw new JSONException("");
 			}
 			catch(JSONException | ClassCastException e)
@@ -97,7 +97,7 @@ public class User
 			String userId = null;
 			try
 			{
-				userId = (String) requestJson.get(UserProperty.userid.name());
+				userId = (String) requestJson.get(UserProperty.userId.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{

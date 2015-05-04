@@ -39,11 +39,11 @@ public class File
 			int filesystemVersion = -1;
 			try
 			{
-				userId = (String) requestJson.get(UserProperty.userid.name());
-				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemid.name());
-				filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemversion.name());
-				filePath = (String) requestJson.get(FileProperty.filepath.name());
-				fileName = (String) requestJson.get(FileProperty.filename.name());
+				userId = (String) requestJson.get(UserProperty.userId.name());
+				filesystemId = (String) requestJson.get(FilesystemProperty.filesystemId.name());
+				filesystemVersion = (int) requestJson.get(FilesystemProperty.filesystemVersion.name());
+				filePath = (String) requestJson.get(FileProperty.filePath.name());
+				fileName = (String) requestJson.get(FileProperty.fileName.name());
 			}
 			catch(JSONException | ClassCastException e)
 			{
